@@ -1,7 +1,7 @@
 # Fare Is Fair
 ## Full-stack Application Project
 ==link to live site==
-Front end client consuming Django API at https://github.com/estebbins/fareisfair
+Front end client consuming Django API at https://github.com/estebbins/FareIsFair-API 
 
 ## Overview
 This is a full-stack application using Django for the backend and React for the front end (DR stack). This is an interactive group game experience, where users can host and participate in a fun game guessing the cost of products using just their browser, and doing what we all love to do - text the answer! 
