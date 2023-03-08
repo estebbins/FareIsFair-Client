@@ -1,3 +1,17 @@
+
+// import logo from './logo.svg';
+// import './App.css';
+import ListBookComponent from  './ListBookComponent'
+// function App() {
+//   return (
+//     <div>
+//       <ListBookComponent />
+//     </div>
+//   );
+// }
+
+// export default App;
+
 // import React, { Component, Fragment } from 'react'
 import React, { useState, Fragment } from 'react'
 import { Route, Routes } from 'react-router-dom'
@@ -44,13 +58,13 @@ const App = () => {
 			<Fragment>
 				<Header user={user} />
 				<Routes>
-					<Route path='/' element={<Home msgAlert={msgAlert} user={user} />} />
+					<Route path='/listbooks/' element={<Home msgAlert={msgAlert} user={user} />} />
 					<Route
 						path='/sign-up'
 						element={<SignUp msgAlert={msgAlert} setUser={setUser} />}
 					/>
 					<Route
-						path='/sign-in'
+						path='/sign-in/'
 						element={<SignIn msgAlert={msgAlert} setUser={setUser} />}
 					/>
           <Route
