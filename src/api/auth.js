@@ -1,13 +1,16 @@
 import apiUrl from '../apiConfig'
 import axios from 'axios'
+axios.defaults.withCredentials = true;
 
 export const signUp = (credentials) => {
 	return axios({
 		method: 'POST',
-		url: apiUrl + '/sign-up',
+		url: apiUrl + '/sign-up/',
 		data: {
 			credentials: {
 				email: credentials.email,
+                username: credentials.username,
+                phone_number: credentials.phone_number,
 				password: credentials.password,
 				password_confirmation: credentials.passwordConfirmation,
 			},
@@ -17,8 +20,9 @@ export const signUp = (credentials) => {
 
 export const signIn = (credentials) => {
 	return axios({
-		url: apiUrl + '/sign-in',
+		url: apiUrl + '/sign-in/',
 		method: 'POST',
+        // 'withCredentials': true,
 		data: {
 			credentials: {
 				email: credentials.email,
@@ -30,20 +34,20 @@ export const signIn = (credentials) => {
 
 export const signOut = (user) => {
 	return axios({
-		url: apiUrl + '/sign-out',
+		url: apiUrl + '/sign-out/',
 		method: 'DELETE',
 		headers: {
-			Authorization: `Token token=${user.token}`,
+			// Authorization: `Token token=${user.token}`,
 		},
 	})
 }
 
 export const changePassword = (passwords, user) => {
 	return axios({
-		url: apiUrl + '/change-password',
+		url: apiUrl + '/change-password/',
 		method: 'PATCH',
 		headers: {
-			Authorization: `Token token=${user.token}`,
+			// Authorization: `Token token=${user.token}`,
 		},
 		data: {
 			passwords: {

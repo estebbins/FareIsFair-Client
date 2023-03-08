@@ -33,6 +33,8 @@ const SignIn = (props) => {
 
         const credentials = {email, password}
 
+        console.log('token', localStorage.getItem('token'))
+
 		signIn(credentials)
 			.then((res) => setUser(res.data.user))
 			.then(() =>
