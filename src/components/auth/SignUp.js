@@ -21,7 +21,7 @@ const SignUp = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
-    const [username, setUsername] = useState('')
+    const [screenname, setScreenname] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
 
     const navigate = useNavigate()
@@ -31,7 +31,7 @@ const SignUp = (props) => {
 
 		const { msgAlert, setUser } = props
 
-        const credentials = {email, password, passwordConfirmation, username, phoneNumber}
+        const credentials = {email, password, passwordConfirmation, screenname, phoneNumber}
 
 		signUp(credentials)
 			.then(() => signIn(credentials))
@@ -48,7 +48,7 @@ const SignUp = (props) => {
                 setEmail('')
                 setPassword('')
                 setPasswordConfirmation('')
-                setUsername('')
+                setScreenname('')
                 setPhoneNumber('')
 				msgAlert({
 					heading: 'Sign Up Failed with error: ' + error.message,
@@ -75,15 +75,15 @@ const SignUp = (props) => {
                             onChange={e => setEmail(e.target.value)}
                         />
                     </Form.Group>
-                    <Form.Group controlId='username'>
-                        <Form.Label>Username</Form.Label>
+                    <Form.Group controlId='screenname'>
+                        <Form.Label>Screenname</Form.Label>
                         <Form.Control
                             required
-                            name='username'
-                            value={username}
+                            name='screenname'
+                            value={screenname}
                             type='text'
-                            placeholder='Username'
-                            onChange={e => setUsername(e.target.value)}
+                            placeholder='screenname'
+                            onChange={e => setScreenname(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group controlId='phone_number'>

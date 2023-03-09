@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { gameSessionIndex } from '../api/gamesession.js'
 
 const Home = (props) => {
-	const { msgAlert, user } = props
+	const { msgAlert, user, csrftoken } = props
 
     const [gameSessions, setGameSessions] = useState(null)
 
 	console.log('props in home', props)
     console.log('gameSessions', gameSessions)
     useEffect(()=> {
-        gameSessionIndex(user)
+        gameSessionIndex(user, csrftoken)
             .then(res => setGameSessions(res.data))
     }, [])
 

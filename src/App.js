@@ -1,5 +1,5 @@
 // import React, { Component, Fragment } from 'react'
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 
@@ -15,15 +15,26 @@ import ChangePassword from './components/auth/ChangePassword'
 
 const App = () => {
 
-  const [user, setUser] = useState(null)
-  const [msgAlerts, setMsgAlerts] = useState([])
+    const [user, setUser] = useState(null)
+    const [msgAlerts, setMsgAlerts] = useState([])
+    const [csrftoken, setCsrftoken] = useState(null)
 
-  console.log('user in app', user)
-  console.log('message alerts', msgAlerts)
-  const clearUser = () => {
-    console.log('clear user ran')
-    setUser(null)
-  }
+    console.log('user in app', user)
+    console.log('message alerts', msgAlerts)
+    const clearUser = () => {
+        console.log('clear user ran')
+        setUser(null)
+        localStorage.clear()
+    }
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user");
+        console.log('ul', user, loggedInUser)
+        if (loggedInUser) {
+        const foundUser = JSON.parse(loggedInUser);
+        setUser(foundUser);
+        }
+    }, [])
 
 	const deleteAlert = (id) => {
 		setMsgAlerts((prevState) => {
@@ -44,14 +55,14 @@ const App = () => {
 			<Fragment>
 				<Header user={user} />
 				<Routes>
-					<Route path='/' element={<Home msgAlert={msgAlert} user={user} />} />
+					<Route path='/' element={<Home msgAlert={msgAlert} user={user} csrftoken={csrftoken} />} />
 					<Route
 						path='/sign-up'
 						element={<SignUp msgAlert={msgAlert} setUser={setUser} />}
 					/>
 					<Route
 						path='/sign-in'
-						element={<SignIn msgAlert={msgAlert} setUser={setUser} />}
+						element={<SignIn msgAlert={msgAlert} setUser={setUser} csrftoken={csrftoken} setCsrftoken={setCsrftoken}/>}
 					/>
           <Route
             path='/sign-out'

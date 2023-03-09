@@ -16,6 +16,8 @@ const SignIn = (props) => {
 	// 		password: '',
 	// 	}
 	// }
+    const { csrftoken, setCsrftoken } = props
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -34,9 +36,17 @@ const SignIn = (props) => {
         const credentials = {email, password}
 
         console.log('token', localStorage.getItem('token'))
-
+        // https://stackoverflow.com/questions/66777351/why-json-object-isnt-being-stored-properly - to stringify the data
 		signIn(credentials)
-			.then((res) => setUser(res.data.user))
+			.then((res) => {
+                console.log('csrf token', res.config.headers['x-csrftoken'])
+                const token = res.config.headers['x-csrftoken']
+                res.data.user['token'] = token
+                setUser(res.data.user)
+                console.log('user in sign in', props.user)
+                localStorage.setItem('user', JSON.stringify(res.data))
+                console.log('local', localStorage.getItem('user'))
+            })
 			.then(() =>
 				msgAlert({
 					heading: 'Sign In Success',
