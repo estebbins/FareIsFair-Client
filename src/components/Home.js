@@ -13,6 +13,10 @@ const Home = (props) => {
             .then(res => setGameSessions(res.data))
     }, [])
 
+    if(!user) {
+        return <p>Log in or Sign up to continue!</p>
+    }
+
     if(gameSessions == null) {
         return <p>Loading</p>
     }
@@ -20,7 +24,7 @@ const Home = (props) => {
         return <p>You have no games!</p>
     }
     let games 
-    if(gameSessions.length > 0) {
+    if(gameSessions.gamesessions.length > 0) {
         games = gameSessions.gamesessions.map((game, i) => {
             console.log('game', game)
             return <p key={i}>{game.session_code}</p>

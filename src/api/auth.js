@@ -3,6 +3,7 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 
 export const signUp = (credentials) => {
+    console.log('credentials at axios', credentials)
 	return axios({
 		method: 'POST',
 		url: apiUrl + '/sign-up/',
@@ -10,7 +11,7 @@ export const signUp = (credentials) => {
 			credentials: {
 				email: credentials.email,
                 username: credentials.username,
-                phone_number: credentials.phone_number,
+                phone_number: credentials.phoneNumber,
 				password: credentials.password,
 				password_confirmation: credentials.passwordConfirmation,
 			},

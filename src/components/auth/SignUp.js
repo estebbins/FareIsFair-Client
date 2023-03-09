@@ -21,6 +21,8 @@ const SignUp = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
+    const [username, setUsername] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
 
     const navigate = useNavigate()
 
@@ -29,7 +31,7 @@ const SignUp = (props) => {
 
 		const { msgAlert, setUser } = props
 
-        const credentials = {email, password, passwordConfirmation}
+        const credentials = {email, password, passwordConfirmation, username, phoneNumber}
 
 		signUp(credentials)
 			.then(() => signIn(credentials))
@@ -46,6 +48,8 @@ const SignUp = (props) => {
                 setEmail('')
                 setPassword('')
                 setPasswordConfirmation('')
+                setUsername('')
+                setPhoneNumber('')
 				msgAlert({
 					heading: 'Sign Up Failed with error: ' + error.message,
 					message: messages.signUpFailure,
@@ -69,6 +73,28 @@ const SignUp = (props) => {
                             value={email}
                             placeholder='Enter email'
                             onChange={e => setEmail(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId='username'>
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            required
+                            name='username'
+                            value={username}
+                            type='text'
+                            placeholder='Username'
+                            onChange={e => setUsername(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId='phone_number'>
+                        <Form.Label>Phone Number</Form.Label>
+                        <Form.Control
+                            required
+                            name='phone_number'
+                            value={phoneNumber}
+                            type='phone'
+                            placeholder=''
+                            onChange={e => setPhoneNumber(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group controlId='password'>
