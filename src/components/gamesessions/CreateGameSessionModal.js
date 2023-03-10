@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import GameSessionForm from '../shared/GameSessionForm'
+import AddPlayerModal from '../players/AddPlayerModal'
 import { createGameSession } from '../../api/gamesession'
 
 const CreateGameSessionModal = (props) => {
-    const { user, msgAlert, show, handleClose, triggerRefresh } = props
-    const [gameSession, setGameSession] = useState(null)
+    const { user, msgAlert, show, handleClose, triggerRefresh, gameSession, setGameSession } = props
 
+    const [showPlayerModal, setPlayerModalShow] = useState(false)
+    const [newGameSession, setNewGameSession] = useState(null)
+
+    console.log('create', gameSession)
     const onChange = (e) => {
         // On change on label form, set the label to the new information
         e.persist()
@@ -31,9 +35,15 @@ const CreateGameSessionModal = (props) => {
         e.preventDefault()
         createGameSession(user, gameSession)
             // close the modal
-            .then(() => handleClose())
+            .then((res) => {
+                setGameSession(res.data)
+                setNewGameSession(res.data)
+            })
+            .then(() => {
+                setPlayerModalShow(true)
+                handleClose()
+            })
             // send a success message
-            .then(() => triggerRefresh())
             // if there is an error, tell the user about it
             .catch(() => {
                 msgAlert({
@@ -57,6 +67,14 @@ const CreateGameSessionModal = (props) => {
                     />
                 </Modal.Body>
             </Modal>
+            <AddPlayerModal 
+                user={user}
+                show={showPlayerModal} 
+                gameSession={newGameSession}
+                handleClose={() => setPlayerModalShow(false)}
+                triggerRefresh={triggerRefresh} 
+                msgAlert={msgAlert}
+            />
         </>
     )
 

@@ -21,6 +21,22 @@ export const addQuestions = (credentials, gamesession_id) => {
 	})
 }
 
+export const addPlayers = (credentials, gamesession_id, players) => {
+    console.log(players)
+	return axios({
+		method: 'PATCH',
+		url: apiUrl + `/games/add_players/`,
+        headers: {
+            Authorization: `Token token=${credentials.token}`
+        },
+        data: {
+            gamesession_id: gamesession_id,
+            players: players
+        },
+        withCredentials: true
+	})
+}
+
 export const createGameSession = (credentials, gamesession) => {
     console.log(credentials)
     return axios({
@@ -33,5 +49,12 @@ export const createGameSession = (credentials, gamesession) => {
             gamesession: gamesession
         },
         withCredentials: true
+	})
+}
+
+export const getPlayers = (credentials, filter) => {
+	return axios({
+		method: 'GET',
+		url: apiUrl + `/find_players/${filter}`,
 	})
 }

@@ -1,7 +1,7 @@
 import { Form, Container, Button } from 'react-bootstrap'
 
 const GameSessionForm = (props) => {
-    const { handleChange, handleSubmit, user } = props
+    const { handleChange, handleSubmit } = props
 
     return(
         <Form onSubmit={handleSubmit}>

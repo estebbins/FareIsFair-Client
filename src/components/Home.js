@@ -8,12 +8,13 @@ const Home = (props) => {
 	const { msgAlert, user } = props
 
     const [gameSessions, setGameSessions] = useState(null)
-    const [game, setGame] = useState(null)
+    const [gameSession, setGameSession] = useState(null)
+    const [newGameSession, setNewGameSession] = useState(null)
     const [showCreateModal, setCreateModalShow] = useState(false)
-    const [showPlayerModal, setPlayerModalShow] = useState(false)
+
     const [updated, setUpdated] = useState(null)
 
-	console.log('props in home', props)
+	// console.log('props in home', props)
     console.log('gameSessions', gameSessions)
 
     useEffect(()=> {
@@ -22,12 +23,8 @@ const Home = (props) => {
     }, [updated])
 
     const onClick = (e) => {
-        setGame(e.target.value)
+        setGameSession(e.target.value)
         addQuestions(user, e.target.value)
-    }
-
-    const handleClose = () => {
-        setCreateModalShow(false)
     }
 
     // Show a different message if the user is not logged in
@@ -61,14 +58,16 @@ const Home = (props) => {
             <CreateGameSessionModal 
                 user={user}
                 show={showCreateModal} 
-                handleClose={() => setCreateModalShow(false)} 
+                handleClose={() => {
+                    setCreateModalShow(false)
+                }} 
                 triggerRefresh={() => setUpdated(prev => !prev)}
+                gameSession={gameSession}
+                setGameSession={setGameSession}
+                setNewGameSession={setNewGameSession}
+                msgAlert={msgAlert}
             />
-            <AddPlayerModal 
-                show={showPlayerModal} 
-                handleClose={() => setPlayerModalShow(false)}
-                triggerRefresh={() => setUpdated(prev => !prev)} 
-            />
+
 		</>
 	)
 }
