@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { gameSessionIndex, addQuestions } from '../api/gamesession.js'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Card } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
 
@@ -44,8 +44,24 @@ const Home = (props) => {
     let games 
     if(gameSessions.gamesessions.length > 0) {
         games = gameSessions.gamesessions.map((game, i) => {
+            console.log('games', games)
             console.log('game', game)
-            return <button key={i} onClick={onClick} value={game.id}>{game.session_code}</button>
+            let players = game.players[0]
+            console.log(players)
+            return (
+                <Card className='m-2'>
+                    <Card.Header>
+                        Game ID: {game.session_code} | Players: {players}
+                    </Card.Header>
+                    <Card.Body>
+                    <Card.Title>Special title treatment</Card.Title>
+                    <Card.Text>
+                        With supporting text below as a natural lead-in to additional content.
+                    </Card.Text>
+                    <Button variant="primary">Go somewhere</Button>
+                    </Card.Body>
+                </Card>
+            )
     })
     }
 

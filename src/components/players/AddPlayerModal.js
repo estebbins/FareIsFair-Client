@@ -9,7 +9,6 @@ const AddPlayerModal = (props) => {
     const [filterValue, setFilterValue] = useState(null)
 
     const [players, setPlayers] = useState({
-        host: props.user,
         player_one: '',
         player_two: '',
         player_three: ''
@@ -19,7 +18,6 @@ const AddPlayerModal = (props) => {
     useEffect(() => {
         // When component is shown or hidden, reset the states 
         setPlayers({
-            host: props.user,
             player_one: '',
             player_two: '',
             player_three: ''

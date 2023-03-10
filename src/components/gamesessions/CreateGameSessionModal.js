@@ -39,6 +39,7 @@ const CreateGameSessionModal = (props) => {
                 setGameSession(res.data)
                 setNewGameSession(res.data)
             })
+            .then(()=> triggerRefresh())
             .then(() => {
                 setPlayerModalShow(true)
                 handleClose()
