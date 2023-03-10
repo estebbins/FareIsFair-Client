@@ -60,7 +60,7 @@ const AddPlayerModal = (props) => {
         // On form submit, API Call to create the contributor
         addPlayers(props.user, props.gameSession.gamesession.id, players)
             // close the modal
-            .then((res) => console.log('res players', players))
+            .then((res) => console.log('res players', res))
             .then(() => handleClose())
             // send a success message
             .then(() => triggerRefresh())
