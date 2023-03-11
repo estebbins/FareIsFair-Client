@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { gameSessionIndex, addQuestions } from '../api/gamesession.js'
+import { gameSessionIndex, addQuestions, getResponses } from '../api/gamesession.js'
 import { Button, Modal, Card } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
@@ -36,7 +36,10 @@ const Home = (props) => {
     const onStart = () => {
 
     }
-
+    const getPlayerResponses = () => {
+        getResponses(user, 7, 6)
+            .then(res=> console.log('get player res', res))
+    }
     // Show a different message if the user is not logged in
     if(!user) {
         return <p>Log in or Sign up to continue!</p>
@@ -81,12 +84,13 @@ const Home = (props) => {
                     { 
                         host ? 
                         <>
-                            <Button>Edit</Button>
+                            <Button onClick={onClick} value={game.id}>Edit</Button>
                             <Button variant="primary" onClick={()=> {
                                 setConfirmModal(true)
                                 setGameSession(game)
                                 }}
                             >Start</Button> 
+                            <Button onClick={getPlayerResponses}>GetResponseTest</Button>
                         </>
                         : 
                         null 

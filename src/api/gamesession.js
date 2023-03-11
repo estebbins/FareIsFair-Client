@@ -58,3 +58,10 @@ export const getPlayers = (credentials, filter) => {
 		url: apiUrl + `/find_players/${filter}`,
 	})
 }
+
+export const getResponses = (credentials, gamesessionId, questionId) => {
+    return axios({
+		method: 'GET',
+		url: apiUrl + `/livegame/${gamesessionId}/${questionId}`
+	})
+}
