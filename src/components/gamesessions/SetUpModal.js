@@ -4,7 +4,7 @@ const SetUpModal = (props) => {
     const { show, handleClose, isHost, active, session_code, game_password, startGame } = props
     return (
         <>
-            <Modal show={true} onHide={handleClose} fullscreen>
+            <Modal show={show} onHide={handleClose} fullscreen>
                 <Modal.Header closeButton>
                     <Modal.Title>Set Up & Instructions</Modal.Title>
                     <span style={{marginLeft: "3px"}}>(This screen can be accessed anytime in between questions)</span>
@@ -14,14 +14,13 @@ const SetUpModal = (props) => {
                         isHost 
                         ? 
                         <>
-
-                                <h4> Thank You for hosting a Fare Is Fair Game Session!!</h4>
-                                <h3>Host Instructions</h3>
-                                <p>Ensure all the players know the Game ID <strong>{session_code}</strong> and the password that you set up <strong>{game_password}</strong> if they are watching from their devices</p>
-                                <p>Once all the players understand the rules and are able to view the questions, click the Start button below</p>
-                                <p>Responses will be checked at the half-way point and when the timer reaches zero, or the host can check for responses by clicking the Check Responses button on the gameplay screen</p>
-                                <p>If all the responses are received before the end of the timer, the timer will end, responses will be scored, and the host can proceed to the next question</p>
-                                <p><strong>Once you click Start, this window will close and the timer will start for the first question</strong></p>
+                            <h4>Thank You for hosting a Fare Is Fair Game Session!!</h4>
+                            <h3>Host Instructions</h3>
+                            <p>Ensure all the players know the Game ID <strong>{session_code}</strong> and the password that you set up <strong>{game_password}</strong> if they are watching from their devices</p>
+                            <p>Once all the players understand the rules and are able to view the questions, click the Start button below</p>
+                            <p>Responses will be checked at the half-way point and when the timer reaches zero, or the host can check for responses by clicking the Check Responses button on the gameplay screen</p>
+                            <p>If all the responses are received before the end of the timer, the timer will end, responses will be scored, and the host can proceed to the next question</p>
+                            <p><strong>Once you click Start, this window will close and the timer will start for the first question</strong></p>
                         </>
                         :
                         null

@@ -54,15 +54,20 @@ const LiveGame = (props) => {
     return (
         <><p>You're in a live game!!</p>
         
+
+
         <Modal show={false}>
         <Modal.Header>Enter Your Password!</Modal.Header>
 
         </Modal>
-
         <SetUpModal 
             show={showSetUpModal}
             handleClose={()=>setShowSetUpModal(false)}
             isHost={isHost}
+            active={}
+            session_code={}
+            game_password={}
+            startGame={}
         />
         </>
         
