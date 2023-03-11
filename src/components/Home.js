@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { gameSessionIndex, addQuestions, getResponses } from '../api/gamesession.js'
+import { gameSessionIndex, addQuestions, getResponses, getQuestion } from '../api/gamesession.js'
 import { Button, Modal, Card } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
@@ -13,6 +13,7 @@ const Home = (props) => {
     const [newGameSession, setNewGameSession] = useState(null)
     const [showCreateModal, setCreateModalShow] = useState(false)
     const [confirmModal, setConfirmModal] = useState(false)
+    const [imgurl, setImgUrl] = useState(null)
 
     const [updated, setUpdated] = useState(null)
 
@@ -36,9 +37,30 @@ const Home = (props) => {
     const onStart = () => {
 
     }
+
     const getPlayerResponses = () => {
         getResponses(user, 7, 6)
-            .then(res=> console.log('get player res', res))
+            .then(res=> {
+                console.log('get player res', res)
+
+            }
+
+            )
+
+    }
+    const getGameQuestion = () => {
+        getQuestion(user, 6)
+            .then(res=> {console.log('get question res', res)
+                let og_url = res.data.question_detail.image
+                console.log(og_url)
+                let url = og_url.split('https://')
+                let new_url = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
+                console.log(new_url)
+                let newer_url = new_url.split('image//').join('image/Target/')
+                console.log(newer_url)
+                setImgUrl(newer_url)
+                .then(()=> setUpdated(prev => !prev))
+            })
     }
     // Show a different message if the user is not logged in
     if(!user) {
@@ -91,6 +113,7 @@ const Home = (props) => {
                                 }}
                             >Start</Button> 
                             <Button onClick={getPlayerResponses}>GetResponseTest</Button>
+                            <Button onClick={getGameQuestion}>GetQuestion</Button>
                         </>
                         : 
                         null 
@@ -106,6 +129,7 @@ const Home = (props) => {
 	return (
 		<>
 			<h2>Home Page</h2>
+            <img src={imgurl} alt="" />
             <Button onClick={() => setCreateModalShow(true)}>Create New Game</Button>
             { games }
             <CreateGameSessionModal 

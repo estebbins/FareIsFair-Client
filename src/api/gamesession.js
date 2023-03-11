@@ -65,3 +65,10 @@ export const getResponses = (credentials, gamesessionId, questionId) => {
 		url: apiUrl + `/livegame/${gamesessionId}/${questionId}`
 	})
 }
+
+export const getQuestion = (credentials, questionId) => {
+    return axios({
+		method: 'GET',
+		url: apiUrl + `/livegame/question/${questionId}`
+	})
+}
