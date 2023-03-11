@@ -144,10 +144,10 @@ const Home = (props) => {
                 setNewGameSession={setNewGameSession}
                 msgAlert={msgAlert}
             />
-            <Modal show={confirmModal} onClose={()=>setConfirmModal(false)}>
+            <Modal show={confirmModal} onHide={()=>setConfirmModal(false)}>
                 <Modal.Header>Are you sure you want to start this game now?</Modal.Header>
                 { gameSession ? 
-                <Link to="/livegame" state={{ gameId: gameSession.id, isHost: true }}  className="btn" variant="danger">Join Live Game Now!!</Link> : null }
+                <Link to="/livegame" state={{ gameId: gameSession.id, isHost: true }}  className="btn" variant="danger">Start Live Game Now!!</Link> : null }
                 <Button onClick={()=>setConfirmModal(false)}>No</Button>
             </Modal>
 		</>
