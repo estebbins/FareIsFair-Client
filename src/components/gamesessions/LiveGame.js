@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import SetUpModal from './SetUpModal'
+import ActiveLiveGame from './ActiveLiveGame'
 
 //  Passing props to a link: https://ui.dev/react-router-pass-props-to-link
 
@@ -16,6 +17,9 @@ const LiveGame = (props) => {
     const [showSetUpModal, setShowSetUpModal] = useState(false)
 
     // Upon loading this page, game whose gameId matches the state gameId needs to be set to active if it is NOT already, game status to also change to in progress
+    useEffect(()=> {
+        
+    },[])
 
     // Questions need to be added (duplicate requests handled on backend, but might be ideal to handle here to prevent more API calls than are necessary)
 
@@ -53,7 +57,14 @@ const LiveGame = (props) => {
 
     return (
         <><p>You're in a live game!!</p>
-        
+        <ActiveLiveGame
+            setShowSetUpModal={setShowSetUpModal}
+            isHost={isHost}
+            players
+            checkResponses
+            gameSession 
+            question
+        />
 
 
         <Modal show={false}>
@@ -64,10 +75,10 @@ const LiveGame = (props) => {
             show={showSetUpModal}
             handleClose={()=>setShowSetUpModal(false)}
             isHost={isHost}
-            active={}
-            session_code={}
-            game_password={}
-            startGame={}
+            // active={}
+            // session_code={}
+            // game_password={}
+            // startGame={}
         />
         </>
         

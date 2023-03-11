@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#active-game-header {
+    display: flex!important;
+    justify-content: center!important;
+}
+#active-game-scores {
+    background-color: blueviolet!important;
+}
+#active-game-area {
+    background-color: aquamarine!important;
+}
+.source-list {
+    list-style: none;
+}
