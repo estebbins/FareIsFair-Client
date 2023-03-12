@@ -10,10 +10,10 @@ export const gameSessionIndex = (credentials) => {
 }
 
 
-export const addQuestions = (credentials, gamesession_id) => {
+export const addQuestions = (credentials, gameSessionId) => {
 	return axios({
 		method: 'PATCH',
-		url: apiUrl + `/games/add_questions/${gamesession_id}/`,
+		url: apiUrl + `/games/add_questions/${gameSessionId}/`,
         headers: {
             Authorization: `Token token=${credentials.token}`
         },
@@ -21,7 +21,7 @@ export const addQuestions = (credentials, gamesession_id) => {
 	})
 }
 
-export const addPlayers = (credentials, gamesession_id, players) => {
+export const addPlayers = (credentials, gameSessionId, players) => {
     console.log(players)
 	return axios({
 		method: 'PATCH',
@@ -30,14 +30,14 @@ export const addPlayers = (credentials, gamesession_id, players) => {
             Authorization: `Token token=${credentials.token}`
         },
         data: {
-            gamesession_id: gamesession_id,
+            gamesession_id: gameSessionId,
             players: players
         },
         withCredentials: true
 	})
 }
 
-export const createGameSession = (credentials, gamesession) => {
+export const createGameSession = (credentials, gameSession) => {
     console.log(credentials)
     return axios({
 		method: 'POST',
@@ -46,7 +46,7 @@ export const createGameSession = (credentials, gamesession) => {
             Authorization: `Token token=${credentials.token}`
         },
         data: {
-            gamesession: gamesession
+            gamesession: gameSession
         },
         withCredentials: true
 	})
@@ -59,10 +59,10 @@ export const getPlayers = (credentials, filter) => {
 	})
 }
 
-export const getResponses = (credentials, gamesessionId, questionId) => {
+export const getResponses = (credentials, gameSessionId, questionId) => {
     return axios({
 		method: 'GET',
-		url: apiUrl + `/livegame/${gamesessionId}/${questionId}`
+		url: apiUrl + `/livegame/${gameSessionId}/${questionId}`
 	})
 }
 
@@ -71,4 +71,17 @@ export const getQuestion = (credentials, questionId) => {
 		method: 'GET',
 		url: apiUrl + `/livegame/question/${questionId}`
 	})
+}
+
+export const getGameDetail = (credentials, gameSessionId) => {
+    return axios({
+
+    })
+}
+
+export const beginGameSession = (credentials, gameSessionId) => {
+    return axios({
+        method: 'PATCH',
+        url: apiUrl + `/livegame/begin/${gameSessionId}/`
+    })
 }

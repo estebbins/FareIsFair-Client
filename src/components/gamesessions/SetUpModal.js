@@ -1,7 +1,7 @@
 import { Modal, Button } from 'react-bootstrap'
 
 const SetUpModal = (props) => {
-    const { show, handleClose, isHost, active, session_code, game_password, startGame } = props
+    const { show, handleClose, isHost, gameSession, startGame } = props
     return (
         <>
             <Modal show={show} onHide={handleClose} fullscreen>
@@ -16,7 +16,7 @@ const SetUpModal = (props) => {
                         <>
                             <h4>Thank You for hosting a Fare Is Fair Game Session!!</h4>
                             <h3>Host Instructions</h3>
-                            <p>Ensure all the players know the Game ID <strong>{session_code}</strong> and the password that you set up <strong>{game_password}</strong> if they are watching from their devices</p>
+                            <p>Ensure all the players know the Game ID <strong>{gameSession.session_code}</strong> and the password that you set up <strong>{gameSession.session_password}</strong> if they are watching from their devices</p>
                             <p>Once all the players understand the rules and are able to view the questions, click the Start button below</p>
                             <p>Responses will be checked at the half-way point and when the timer reaches zero, or the host can check for responses by clicking the Check Responses button on the gameplay screen</p>
                             <p>If all the responses are received before the end of the timer, the timer will end, responses will be scored, and the host can proceed to the next question</p>
@@ -41,11 +41,11 @@ const SetUpModal = (props) => {
                         </ul>
                 </Modal.Body>
                         { 
-                            isHost && !active
+                            isHost && !gameSession.is_active
                             ? 
                             <>
                                 <Modal.Footer>
-                                    <Button onClick={startGame} className="btn" variant="danger">Start Game</Button>
+                                    <Button onClick={() => startGame()} className="btn" variant="danger">Start Game</Button>
                                 </Modal.Footer>
                             </>
                             :
