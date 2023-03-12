@@ -6,7 +6,7 @@ import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
 
 const Home = (props) => {
-	const { msgAlert, user } = props
+	const { msgAlert, user, triggerRefresh } = props
 
     const [gameSessions, setGameSessions] = useState(null)
     const [gameSession, setGameSession] = useState(null)
@@ -19,6 +19,7 @@ const Home = (props) => {
 
 	// console.log('props in home', props)
     console.log('gameSessions', gameSessions)
+    console.log('user in home', user)
 
     const navigate = useNavigate()
 
@@ -81,13 +82,16 @@ const Home = (props) => {
         games = gameSessions.gamesessions.map((game, i) => {
             console.log('games', games)
             console.log('game', game)
-            let players = game.players[0]
+            let players = game.players.length
+            // console.log('game players', game.players.len)
             console.log(players)
             // Determine if current player is host by quering array
             let host = false
-            if(gameSessions.playerdata.some(function(players){return players["game"] === game.id})){
-                host = true
-            }
+            gameSessions.playerdata.forEach(player => {
+                if (player.player === user.id && player.role === 'h' && player.game === game.id){
+                    host = true
+                }
+            })
             return (
                 <Card className='m-2' key={i}>
                     { game.is_active ? <Link to="/livegame" state={{ gameId: game.id, isHost: host }} className="btn" variant="danger">Join Live Game Now!!</Link> : null }

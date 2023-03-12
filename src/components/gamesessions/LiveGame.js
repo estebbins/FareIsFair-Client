@@ -195,28 +195,28 @@ const LiveGame = (props) => {
         
         } else if(responses) {
             if(responses.length === players.length){ //! OR TIMER IS UP
+                console.log('RESSSIES', responses)
                 console.log('length matches length')
                 let correctResponses = []
-                for(let i = 0; i < responses.length; i++)
                 responses.forEach(response => {
-                    if (response.delta >= 0) {
+                    if (parseInt(response.delta) >= 0) {
                         correctResponses.push(response)
                     }
                 })
                 console.log('correct responses after first for', correctResponses)
                 // https://stackoverflow.com/questions/979256/sorting-an-array-of-objects-by-property-values
                 if (correctResponses.length > 1) {
-                    correctResponses.sort(function(a,b) {
-                        return parseFloat(a.response) - parseFloat(b.response)
-                    })
+                    correctResponses.sort((a,b) => parseFloat(a.response) - parseFloat(b.response)
+                    )
                     console.log('correct responses after sort', correctResponses)
                     let arrayLength = correctResponses.length
                     for(let o = 0; o < arrayLength; o++){
-                        if (correctResponses[o] < correctResponses[o+1]){
-                            correctResponses.unshift()
+                        if (correctResponses[o] && correctResponses[o+1] &&correctResponses[o].response < correctResponses[o+1].response){
+                            console.log('this was hit')
+                            correctResponses.shift()
                         }
                     } 
-                    console.log('correct responses after unshift', correctResponses)
+                    console.log('correct responses after shift', correctResponses)
                 }
                 console.log('correct responses before last for each', correctResponses)
                 if (correctResponses.length > 0){
@@ -269,19 +269,22 @@ const LiveGame = (props) => {
     }
 
     const checkResponses = () => {
+        console.log('AT CHECK RESPONSES')
         getResponses(user, gameSession.id, activeQuestion.id)
             .then(res => {
                 console.log('check responses', res)
-                setResponses(res.data.player_responses)
+                if (res.data.player_responses.length > 0) {
+                    setResponses(res.data.player_responses)
+                }
             })
     }
 
     const checkFinalRound = () => {
         getResponses(user, gameSession.id, null)
-        .then(res => {
-            console.log('check final', res)
-            setResponses(res.data.player_responses)
-        })
+            .then(res => {
+                console.log('check final', res)
+                setResponses(res.data.player_responses)
+            })
     }
 
     return (
@@ -290,7 +293,7 @@ const LiveGame = (props) => {
             setShowSetUpModal={setShowSetUpModal}
             isHost={isHost}
             players={players}
-            checkResponses={finalRound ? checkFinalRound : checkResponses}
+            checkResponses={checkResponses}
             gameSession={gameSession}
             question={activeQuestion}
             question_num={currentQuestionNum}

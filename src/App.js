@@ -18,6 +18,7 @@ const App = () => {
 
     const [user, setUser] = useState(null)
     const [msgAlerts, setMsgAlerts] = useState([])
+    const [updated, setUpdated] = useState(false)
     console.log('user in app', user)
     console.log('message alerts', msgAlerts)
 
@@ -28,13 +29,18 @@ const App = () => {
     }
 
     useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
+        const loggedInUser = localStorage.getItem("user")
         console.log('ul', user, loggedInUser)
         if (loggedInUser) {
-            const foundUser = JSON.parse(loggedInUser);
-            setUser(foundUser);
+            const foundUser = JSON.parse(loggedInUser)
+            setUser(foundUser.user)
+            setUpdated(prev => !prev)
         }
     }, [])
+
+    useEffect(()=> {
+
+    }, [updated])
 
 	const deleteAlert = (id) => {
 		setMsgAlerts((prevState) => {
@@ -54,7 +60,7 @@ const App = () => {
 			<Fragment>
 				<Header user={user} />
 				<Routes>
-					<Route path='/' element={<Home msgAlert={msgAlert} user={user} />} />
+					<Route path='/' element={<Home msgAlert={msgAlert} user={user} triggerRefresh={()=>setUpdated(prev=>!prev)}/>} />
 					<Route
 						path='/sign-up'
 						element={<SignUp msgAlert={msgAlert} setUser={setUser} />}
