@@ -85,3 +85,22 @@ export const beginGameSession = (credentials, gameSessionId) => {
         url: apiUrl + `/livegame/begin/${gameSessionId}/`
     })
 }
+
+export const scorePlayer = (credentials, playerId, gameSessionId, score) => {
+    return axios({
+        method: 'PATCH',
+        url: apiUrl + `/livegame/add_score/`,
+        data: {
+            player_id: playerId,
+            game_session_id: gameSessionId,
+            score: score
+        }
+    })
+}
+
+export const nextRound = (credentials, gameSessionId, questionId) => {
+    return axios({
+        method: 'GET',
+        url: apiUrl + `/livegame/next_round/${gameSessionId}/${questionId}/`,
+    })
+}
