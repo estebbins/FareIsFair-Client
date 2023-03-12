@@ -75,7 +75,8 @@ export const getQuestion = (credentials, questionId) => {
 
 export const getGameDetail = (credentials, gameSessionId) => {
     return axios({
-
+        method: 'GET',
+        url: apiUrl + `/game/${gameSessionId}`
     })
 }
 

@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import SetUpModal from './SetUpModal'
 import ActiveLiveGame from './ActiveLiveGame'
-import { addQuestions, beginGameSession, getResponses, scorePlayer, nextRound } from '../../api/gamesession'
+import AnswerModal from './AnswerModal'
+import { addQuestions, beginGameSession, getResponses, scorePlayer, nextRound, getGameDetail } from '../../api/gamesession'
 
 //  Passing props to a link: https://ui.dev/react-router-pass-props-to-link
 
@@ -21,8 +22,9 @@ const LiveGame = (props) => {
     const [responses, setResponses] = useState(null)
     const [updated, setUpdated] = useState(false)
     const [currentQuestionNum, setCurrentQuestionNum] = useState(1)
+    const [showAnswerModal, setShowAnswersModal] = useState(false)
 
-    const [showPasswordModal, setShowPasswordModal] = useState(false)
+    // const [showPasswordModal, setShowPasswordModal] = useState(false)
     // Disable handle close for setup if game is not active!!! Close it when it is set to active
     const [showSetUpModal, setShowSetUpModal] = useState(false)
     console.log('live game gameSession', gameSession)
@@ -34,12 +36,9 @@ const LiveGame = (props) => {
     // console.log('live game gameSession.active_question', `${ gameSession.active_question ? gameSession.active_question : null }`)
     // Upon loading this page, game whose gameId matches the state gameId needs to be set to active if it is NOT already, game status to also change to in progress
     useEffect(()=> {
-        if(!activeQuestion){
-            console.log('FIRST USEEFFECT RAN')
-            addQuestions(user, gameId)
-                .then(res => {
-                    console.log('live game useeffect first res', res)
-                    setGameSession(res.data.gameSession)
+        getGameDetail(user, gameId)
+            .then((res) => {
+                if (res.data.gameSession.is_active) {
                     let resQuestions = res.data.gameQuestions
                     for (let i = 0; i < res.data.gameQuestions.length; i++) {
                         // Adjust URL Pattern
@@ -51,11 +50,31 @@ const LiveGame = (props) => {
                     setQuestions(resQuestions)
                     setPlayers(res.data.players)
                     setUsers(res.data.users)
-                })
-            .then(()=>setShowSetUpModal(true))
-            .then(()=> setUpdated(prev=>!prev))
-        }
-    },[])
+                    setGameSession(res.data.gameSession)
+                } else {  
+                    if(!activeQuestion){
+                        console.log('FIRST USEEFFECT RAN')
+                        addQuestions(user, gameId)
+                            .then(res => {
+                                console.log('live game useeffect first res', res)
+            
+                                let resQuestions = res.data.gameQuestions
+                                for (let i = 0; i < res.data.gameQuestions.length; i++) {
+                                    // Adjust URL Pattern
+                                    let url = resQuestions[i]["image"].split('https://')
+                                    let url_adjusted = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
+                                    let url_final = url_adjusted.split('image//').join('image/Target/')
+                                    resQuestions[i] = {...resQuestions[i], image: url_final}
+                                }
+                                setQuestions(resQuestions)
+                                setPlayers(res.data.players)
+                                setUsers(res.data.users)
+                                setGameSession(res.data.gameSession)
+                            })
+                        .then(()=>setShowSetUpModal(true))
+                        .then(()=> setUpdated(prev=>!prev))
+                        }
+    }})},[])
 
     useEffect(()=> {
         console.log('!!!!!!!!!!!!live game useeffect with updated as dependency')
@@ -108,7 +127,7 @@ const LiveGame = (props) => {
                 })
                 setQuestions(questions)
             }
-        }, [gameSession])
+    }, [gameSession])
 
     useEffect(()=> {
         if(questions) {
@@ -154,9 +173,9 @@ const LiveGame = (props) => {
 
     // Questions
 
-    useEffect(() => {
-        setShowPasswordModal(true)
-    }, [])
+    // useEffect(() => {
+    //     setShowPasswordModal(true)
+    // }, [])
 
     useEffect(() => {
         // Check responses if number of players recieved or timer is up
@@ -193,28 +212,29 @@ const LiveGame = (props) => {
                                 console.log('score player', res)
                                 setPlayers(res.data.playerData)
                             })
-                            .then(() => {
-                                nextRound(user, gameSession.id, activeQuestion.id)
-                                    .then(res => {
-                                        console.log('nextround res', res)
-                                        if(res.data !== 'endgame') {
-                                            setGameSession(res.data.gameSession)
-                                        }
-                                    })
-                            })
+                            .then(() => setShowAnswersModal(true))
                     })
                 } else {
-                    nextRound(user, gameSession.id, activeQuestion.id)
-                                    .then(res => {
-                                        console.log('nextround res', res)
-                                        if(res.data !== 'endgame') {
-                                            setGameSession(res.data.gameSession)
-                                        }
-                                    })
+                    setShowAnswersModal(true)
                 }
             }
         }
     },[responses])
+
+    const changeRound = () => {
+        nextRound(user, gameSession.id, activeQuestion.id)
+            .then(res => {
+                console.log('nextround res', res)
+                if(res.data !== 'endgame') {
+                    setGameSession(res.data.gameSession)
+                }
+            })
+    }
+
+    const startRound = () => {
+        setShowAnswersModal(false)
+        changeRound()
+    }
 
     const checkResponses = () => {
         getResponses(user, gameSession.id, activeQuestion.id)
@@ -247,6 +267,21 @@ const LiveGame = (props) => {
                 isHost={isHost}
                 gameSession={gameSession}
                 startGame={startGame}
+            />
+            :
+            null
+        }
+        {
+            responses
+            ?
+            <AnswerModal
+                show={showAnswerModal}
+                responses={responses}
+                handleClose={() => setShowAnswersModal(false)}
+                users={users}
+                startRound={startRound}
+                isHost={isHost}
+                answer={activeQuestion.answer}
             />
             :
             null
