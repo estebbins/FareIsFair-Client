@@ -23,7 +23,10 @@ const LiveGame = (props) => {
     const [updated, setUpdated] = useState(false)
     const [currentQuestionNum, setCurrentQuestionNum] = useState(1)
     const [showAnswerModal, setShowAnswersModal] = useState(false)
-
+    const [host, setHost] = useState(isHost)
+    const [finalRound, setFinalRound] = useState(false)
+    const [firstPlace, setFirstPlace] = useState(null)
+    const [secondPlace, setSecondPlace] = useState(null)
     // const [showPasswordModal, setShowPasswordModal] = useState(false)
     // Disable handle close for setup if game is not active!!! Close it when it is set to active
     const [showSetUpModal, setShowSetUpModal] = useState(false)
@@ -51,6 +54,11 @@ const LiveGame = (props) => {
                     setPlayers(res.data.players)
                     setUsers(res.data.users)
                     setGameSession(res.data.gameSession)
+                    for (let i = 0; i <res.data.players; i++){
+                        if (res.data.players[i].role === "h" && res.data.players[i].id === user.id) {
+                            setHost(true)
+                        }
+                    }
                 } else {  
                     if(!activeQuestion){
                         console.log('FIRST USEEFFECT RAN')
@@ -127,6 +135,9 @@ const LiveGame = (props) => {
                 })
                 setQuestions(questions)
             }
+        if(gameSession && gameSession.game_result === 'completed'){
+            setFinalRound(true)
+        }
     }, [gameSession])
 
     useEffect(()=> {
@@ -179,7 +190,10 @@ const LiveGame = (props) => {
 
     useEffect(() => {
         // Check responses if number of players recieved or timer is up
-        if(responses) {
+        if (finalRound && responses) {
+            console.log('responses', responses)
+        
+        } else if(responses) {
             if(responses.length === players.length){ //! OR TIMER IS UP
                 console.log('length matches length')
                 let correctResponses = []
@@ -221,12 +235,30 @@ const LiveGame = (props) => {
         }
     },[responses])
 
+    useEffect(() => {
+        // find the top 1-2 players
+        if(finalRound) {
+            let allPlayers = players.sort(function(a,b) {
+                // sort in ascending order
+                return parseFloat(a.score) - parseFloat(b.score)
+            })
+            setFirstPlace(allPlayers.pop())
+            setSecondPlace(allPlayers.pop())
+        }
+    }, [finalRound])
+
+    const setWinner = () => {
+
+    }
+
     const changeRound = () => {
         nextRound(user, gameSession.id, activeQuestion.id)
             .then(res => {
                 console.log('nextround res', res)
-                if(res.data !== 'endgame') {
+                if(res.data.gameSession.game_result !== 'completed') {
                     setGameSession(res.data.gameSession)
+                } else if (res.data.gameSession.game_result === 'completed') {
+                    setFinalRound(true)
                 }
             })
     }
@@ -243,17 +275,29 @@ const LiveGame = (props) => {
                 setResponses(res.data.player_responses)
             })
     }
+
+    const checkFinalRound = () => {
+        getResponses(user, gameSession.id, null)
+        .then(res => {
+            console.log('check final', res)
+            setResponses(res.data.player_responses)
+        })
+    }
+
     return (
         <><p>You're in a live game!! Do not Refresh Page</p>
         <ActiveLiveGame
             setShowSetUpModal={setShowSetUpModal}
             isHost={isHost}
             players={players}
-            checkResponses={checkResponses}
+            checkResponses={finalRound ? checkFinalRound : checkResponses}
             gameSession={gameSession}
             question={activeQuestion}
             question_num={currentQuestionNum}
             users={users}
+            finalRound={finalRound}
+            firstPlace={firstPlace}
+            secondPlace={secondPlace}
         />
         <Modal show={false}>
         <Modal.Header>Enter Your Password!</Modal.Header>
@@ -272,7 +316,7 @@ const LiveGame = (props) => {
             null
         }
         {
-            responses
+            responses && !finalRound
             ?
             <AnswerModal
                 show={showAnswerModal}

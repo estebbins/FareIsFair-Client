@@ -81,8 +81,8 @@ const App = () => {
             <Route
                 path='/livegame'
                 element={
-                <RequireAuth user={user}>
-                    <LiveGame user={user} />
+                <RequireAuth user={JSON.parse(localStorage.getItem("user")) || user}>
+                    <LiveGame user={JSON.parse(localStorage.getItem("user")) || user} />
                 </RequireAuth>
                 }
             />

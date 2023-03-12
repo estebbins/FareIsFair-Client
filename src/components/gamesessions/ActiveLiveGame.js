@@ -2,7 +2,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 
 const ActiveLiveGame = (props) => {
-    const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users } = props
+    const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users, finalRound, firstPlace, secondPlace } = props
     
     const [players, setPlayers] = useState(props.players)
 
@@ -35,7 +35,7 @@ const ActiveLiveGame = (props) => {
     useEffect(()=> {
 
     }, [players])
-    
+
     let player_scores
     if(players && players.length > 0 && users) {
         player_scores = players.map((player, i) => {
@@ -90,7 +90,19 @@ const ActiveLiveGame = (props) => {
                         </Row>
                     </Col>
                     {
-                        question
+                        finalRound
+                        ?
+                        <>
+                            <Col xs={15} md={10} id="active-game-area">
+                                Text spin to see if you win!
+                                The player that gets the closest to $1.00 wins!
+                            </Col>
+                        </>
+                        :
+                        null
+                    }
+                    {
+                        question && !finalRound
                         ?
                         <Col xs={15} md={10} id="active-game-area">
                             <Row>

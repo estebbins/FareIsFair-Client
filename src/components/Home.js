@@ -107,6 +107,7 @@ const Home = (props) => {
                         host ? 
                         <>
                             <Button onClick={onClick} value={game.id}>Edit</Button>
+                            {/* SET CONDITION FOR IF PLAYERS <2, not to show this button */}
                             <Button variant="primary" onClick={()=> {
                                 setConfirmModal(true)
                                 setGameSession(game)
