@@ -19,11 +19,11 @@ const AddPlayerModal = (props) => {
 
     useEffect(() => {
         // When component is shown or hidden, reset the states 
-        setPlayers([
+        setPlayers(
             {player_one: ''},
             {player_two: ''},
             {player_three: ''}
-        ])
+        )
         setFilterValueOne('')
         setFilterValueTwo('')
         setFilterValueThree('')

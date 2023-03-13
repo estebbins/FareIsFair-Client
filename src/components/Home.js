@@ -13,15 +13,12 @@ const Home = (props) => {
     const [newGameSession, setNewGameSession] = useState(null)
     const [showCreateModal, setCreateModalShow] = useState(false)
     const [confirmModal, setConfirmModal] = useState(false)
-    const [imgurl, setImgUrl] = useState(null)
 
     const [updated, setUpdated] = useState(null)
 
 	// console.log('props in home', props)
     console.log('gameSessions', gameSessions)
     console.log('user in home', user)
-
-    const navigate = useNavigate()
 
     useEffect(()=> {
         gameSessionIndex(user)
@@ -35,34 +32,6 @@ const Home = (props) => {
         addQuestions(user, e.target.value)
     }
 
-    const onStart = () => {
-
-    }
-
-    const getPlayerResponses = () => {
-        getResponses(user, 7, 6)
-            .then(res=> {
-                console.log('get player res', res)
-
-            }
-
-            )
-
-    }
-    const getGameQuestion = () => {
-        getQuestion(user, 6)
-            .then(res=> {console.log('get question res', res)
-                let og_url = res.data.question_detail.image
-                console.log(og_url)
-                let url = og_url.split('https://')
-                let new_url = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
-                console.log(new_url)
-                let newer_url = new_url.split('image//').join('image/Target/')
-                console.log(newer_url)
-                setImgUrl(newer_url)
-                .then(()=> setUpdated(prev => !prev))
-            })
-    }
     const deleteGame = (e) => {
         console.log('e', e)
         gameDelete(user, e.target.value)
@@ -151,7 +120,6 @@ const Home = (props) => {
 	return (
 		<>
 			<h2>Home Page</h2>
-            <img src={imgurl} alt="" />
             <Button onClick={() => setCreateModalShow(true)}>Create New Game</Button>
             { games }
             <CreateGameSessionModal 

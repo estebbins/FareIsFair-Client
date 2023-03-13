@@ -42,15 +42,15 @@ const LiveGame = (props) => {
         getGameDetail(user, gameId)
             .then((res) => {
                 if (res.data.gameSession.is_active) {
-                    let resQuestions = res.data.gameQuestions
-                    for (let i = 0; i < res.data.gameQuestions.length; i++) {
-                        // Adjust URL Pattern
-                        let url = resQuestions[i]["image"].split('https://')
-                        let url_adjusted = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
-                        let url_final = url_adjusted.split('image//').join('image/Target/')
-                        resQuestions[i] = {...resQuestions[i], image: url_final}
-                    }
-                    setQuestions(resQuestions)
+                    // let resQuestions = res.data.gameQuestions
+                    // for (let i = 0; i < res.data.gameQuestions.length; i++) {
+                    //     // Adjust URL Pattern
+                    //     let url = resQuestions[i]["image"].split('https://')
+                    //     let url_adjusted = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
+                    //     let url_final = url_adjusted.split('image//').join('image/Target/')
+                    //     resQuestions[i] = {...resQuestions[i], image: url_final}
+                    // }
+                    setQuestions(res.data.gameQuestions)
                     setPlayers(res.data.players)
                     setUsers(res.data.users)
                     setGameSession(res.data.gameSession)
@@ -66,15 +66,15 @@ const LiveGame = (props) => {
                             .then(res => {
                                 console.log('live game useeffect first res', res)
             
-                                let resQuestions = res.data.gameQuestions
-                                for (let i = 0; i < res.data.gameQuestions.length; i++) {
-                                    // Adjust URL Pattern
-                                    let url = resQuestions[i]["image"].split('https://')
-                                    let url_adjusted = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
-                                    let url_final = url_adjusted.split('image//').join('image/Target/')
-                                    resQuestions[i] = {...resQuestions[i], image: url_final}
-                                }
-                                setQuestions(resQuestions)
+                                // let resQuestions = res.data.gameQuestions
+                                // for (let i = 0; i < res.data.gameQuestions.length; i++) {
+                                //     // Adjust URL Pattern
+                                //     let url = resQuestions[i]["image"].split('https://')
+                                //     let url_adjusted = 'https://target' + url[1] + '?qlt=85&fmt=webp&hei=253&wid=253'
+                                //     let url_final = url_adjusted.split('image//').join('image/Target/')
+                                //     resQuestions[i] = {...resQuestions[i], image: url_final}
+                                // }
+                                setQuestions(res.data.gameQuestions)
                                 setPlayers(res.data.players)
                                 setUsers(res.data.users)
                                 setGameSession(res.data.gameSession)

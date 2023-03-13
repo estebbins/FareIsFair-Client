@@ -20,7 +20,7 @@ const SignOut = (props) => {
 					variant: 'success',
 				})
 			)
-			.finally(() => navigate('/'))
+			.finally(() => navigate('/sign-in'))
 			.finally(() => clearUser())
     }
 
