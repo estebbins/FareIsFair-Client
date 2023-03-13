@@ -31,6 +31,7 @@ const App = () => {
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user")
         console.log('ul', user, loggedInUser)
+        // https://stackoverflow.com/questions/66777351/why-json-object-isnt-being-stored-properly
         if (loggedInUser) {
             const foundUser = JSON.parse(loggedInUser)
             setUser(foundUser.user)
