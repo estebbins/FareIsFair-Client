@@ -5,20 +5,22 @@ import { getPlayers } from '../../api/gamesession.js'
 //////////// <----This component takes props from AddPlayerModal
 
 const PlayerForm = (props) => {
-    const { user, filterValue, handleChange, handleSubmit, handleChoice, triggerRefresh, msgAlert } = props
+    const { user, filterValueOne, filterValueTwo, filterValueThree, handleChangeOne, handleChangeTwo, handleChangeThree, handleSubmit, handleChoice, msgAlert } = props
 
     // Set list of users matching the filter
-    const [userList, setUserList] = useState([])
+    const [userListOne, setUserListOne] = useState([])
+    const [userListTwo, setUserListTwo] = useState([])
+    const [userListThree, setUserListThree] = useState([])
     // Set the contributor from props
-    console.log('filter', filterValue)
+    console.log('filter', filterValueOne)
     useEffect(() => {
-        console.log('useeffect filterValue', filterValue)
+        console.log('useeffect filterValue', filterValueOne)
         // If there is a filterValue, then get a list of users that matches that filter value
-        if (filterValue) {
-            getPlayers(user, filterValue)
+        if (filterValueOne) {
+            getPlayers(user, filterValueOne)
                 .then(res => {
                     console.log('res', res)
-                    setUserList(res.data.users)})
+                    setUserListOne(res.data.users)})
                 .catch(err => {
                     msgAlert({
                         heading: 'Error!',
@@ -27,15 +29,52 @@ const PlayerForm = (props) => {
                     })
                 })
         }
-    }, [filterValue])
+    }, [filterValueOne])
 
-    // useEffect(() => {
-    //     // Refresh form if contributor changes
-    //     // console.log('useeffect contributor(form)', contributor)
-    //     // setContributor(contributor)
-    // }, [contributor])
+    useEffect(() => {
+        console.log('useeffect filterValue', filterValueTwo)
+        // If there is a filterValue, then get a list of users that matches that filter value
+        if (filterValueTwo) {
+            getPlayers(user, filterValueTwo)
+                .then(res => {
+                    console.log('res', res)
+                    setUserListTwo(res.data.users)})
+                .catch(err => {
+                    msgAlert({
+                        heading: 'Error!',
+                        message: 'Error finding users!',
+                        variant: 'danger'
+                    })
+                })
+        }
+    }, [filterValueTwo])
 
-    const filteredUsers = userList.map((user, i) => (
+    useEffect(() => {
+        console.log('useeffect filterValue', filterValueThree)
+        // If there is a filterValue, then get a list of users that matches that filter value
+        if (filterValueThree) {
+            getPlayers(user, filterValueThree)
+                .then(res => {
+                    console.log('res', res)
+                    setUserListThree(res.data.users)})
+                .catch(err => {
+                    msgAlert({
+                        heading: 'Error!',
+                        message: 'Error finding users!',
+                        variant: 'danger'
+                    })
+                })
+        }
+    }, [filterValueThree])
+
+
+    const filteredUsersOne = userListOne.map((user, i) => (
+        <option value={user._id} key={i}>{user.email}</option>
+    ))
+    const filteredUsersTwo = userListTwo.map((user, i) => (
+        <option value={user._id} key={i}>{user.email}</option>
+    ))
+    const filteredUsersThree = userListThree.map((user, i) => (
         <option value={user._id} key={i}>{user.email}</option>
     ))
 
@@ -46,10 +85,10 @@ const PlayerForm = (props) => {
                     <Form.Label>Search for Players</Form.Label>
                     <Form.Control 
                         placeholder="What is the user's e-mail"
-                        name='filterValue'
-                        id='filterValue'
-                        // value={filterValue || ''}
-                        onChange={handleChange}
+                        name='filterValueOne'
+                        id='filterValueOne'
+                        value={filterValueOne || ''}
+                        onChange={handleChangeOne}
                     />
                 </Form.Group>
                 <Form.Group className='m-2'>
@@ -74,11 +113,21 @@ const PlayerForm = (props) => {
                             onChange={handleChoice}
                         >
                             <option>Open this select menu</option>
-                            { filteredUsers }
+                            { filteredUsersOne }
                         </Form.Select>
                     }
                 </Form.Group>
                 <Form.Group className='m-2'>
+                <Form.Group className='m-2'>
+                    <Form.Label>Search for Players</Form.Label>
+                    <Form.Control 
+                        placeholder="What is the user's e-mail"
+                        name='filterValueTwo'
+                        id='filterValueTwo'
+                        value={filterValueTwo || ''}
+                        onChange={handleChangeTwo}
+                    />
+                </Form.Group>
                     <Form.Label>Player Two</Form.Label>
                     { props.player ? 
                         <></>
@@ -100,11 +149,21 @@ const PlayerForm = (props) => {
                             onChange={handleChoice}
                         >
                             <option>Open this select menu</option>
-                            { filteredUsers }
+                            { filteredUsersTwo }
                         </Form.Select>
                     }
                 </Form.Group>
                 <Form.Group className='m-2'>
+                <Form.Group className='m-2'>
+                    <Form.Label>Search for Players</Form.Label>
+                    <Form.Control 
+                        placeholder="What is the user's e-mail"
+                        name='filterValueThree'
+                        id='filterValueThree'
+                        value={filterValueThree || ''}
+                        onChange={handleChangeThree}
+                    />
+                </Form.Group>
                     <Form.Label>Player Three</Form.Label>
                     { props.player ? 
                         <></>
@@ -126,7 +185,7 @@ const PlayerForm = (props) => {
                             onChange={handleChoice}
                         >
                             <option>Open this select menu</option>
-                            { filteredUsers }
+                            { filteredUsersThree }
                         </Form.Select>
                     }
                 </Form.Group>

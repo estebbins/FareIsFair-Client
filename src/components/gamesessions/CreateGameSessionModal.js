@@ -65,6 +65,7 @@ const CreateGameSessionModal = (props) => {
                     <GameSessionForm
                         handleChange={onChange}
                         handleSubmit={onSubmit}
+                        gameSession={gameSession}
                     />
                 </Modal.Body>
             </Modal>

@@ -103,7 +103,7 @@ const Home = (props) => {
                 <Card className='m-2' key={i}>
                     { game.is_active ? <Link to="/livegame" state={{ gameId: game.id, isHost: host }} className="btn" variant="danger">Join Live Game Now!!</Link> : null }
                     <Card.Header>
-                        Game ID: {game.session_code} | 
+                        Game ID: {game.session_name} | 
                         Players: {players} |
                         Status: {game.game_result} |
                         { host ? <>&#9989;</> : null }

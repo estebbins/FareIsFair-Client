@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { addPlayers } from '../../api/gamesession'
 import { Modal } from 'react-bootstrap'
 import PlayerForm from '../shared/PlayerForm'
+// ! NOT WORKING/NOT USED - FOR DEV
 
 const AddPlayerModal = (props) => {
     const { msgAlert, show, handleClose, triggerRefresh } = props
@@ -110,7 +111,7 @@ const AddPlayerModal = (props) => {
                         handleChoice={onChoice}
                         triggerRefresh={triggerRefresh}
                         msgAlert={msgAlert}
-                        players
+                        // players={players}
                     />
                 </Modal.Body>
             </Modal>
