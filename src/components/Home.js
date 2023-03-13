@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { gameSessionIndex, addQuestions, getResponses, getQuestion } from '../api/gamesession.js'
+import { gameSessionIndex, addQuestions, getResponses, getQuestion, gameDelete } from '../api/gamesession.js'
 import { Button, Modal, Card } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
@@ -63,6 +63,13 @@ const Home = (props) => {
                 .then(()=> setUpdated(prev => !prev))
             })
     }
+    const deleteGame = (e) => {
+        console.log('e', e)
+        gameDelete(user, e.target.value)
+            .then(res => console.log(res))
+            .then(()=>setUpdated(prev=>!prev))
+            .catch(err=>console.log(err))
+    }
     // Show a different message if the user is not logged in
     if(!user) {
         return <p>Log in or Sign up to continue!</p>
@@ -111,14 +118,24 @@ const Home = (props) => {
                         host ? 
                         <>
                             <Button onClick={onClick} value={game.id}>Edit</Button>
-                            {/* SET CONDITION FOR IF PLAYERS <2, not to show this button */}
-                            <Button variant="primary" onClick={()=> {
-                                setConfirmModal(true)
-                                setGameSession(game)
-                                }}
-                            >Start</Button> 
-                            <Button onClick={getPlayerResponses}>GetResponseTest</Button>
-                            <Button onClick={getGameQuestion}>GetQuestion</Button>
+                            {
+                                players > 1
+                                ?
+                                <Button variant="primary" onClick={()=> {
+                                    setConfirmModal(true)
+                                    setGameSession(game)
+                                    }}
+                                >Start</Button> 
+                                :
+                                null
+                            }
+                            {
+                                game.game_result === 'pending'
+                                ?
+                                <Button onClick={deleteGame} value={game.id} variant="danger">Delete</Button>
+                                :
+                                null
+                            }
                         </>
                         : 
                         null 

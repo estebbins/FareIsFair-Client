@@ -238,10 +238,10 @@ const LiveGame = (props) => {
     useEffect(() => {
         // find the top 1-2 players
         if(finalRound) {
-            let allPlayers = players.sort(function(a,b) {
+            let allPlayers = players.sort((a,b) => 
                 // sort in ascending order
-                return parseFloat(a.score) - parseFloat(b.score)
-            })
+                parseFloat(a.score) - parseFloat(b.score)
+            )
             setFirstPlace(allPlayers.pop())
             setSecondPlace(allPlayers.pop())
         }

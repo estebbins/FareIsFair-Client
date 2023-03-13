@@ -105,3 +105,14 @@ export const nextRound = (credentials, gameSessionId, questionId) => {
         url: apiUrl + `/livegame/next_round/${gameSessionId}/${questionId}/`,
     })
 }
+
+export const gameDelete = (credentials, gameSessionId) => {
+    return axios({
+        method: 'DELETE',
+        url: apiUrl + `/game/delete/${gameSessionId}/`,
+        headers: {
+            Authorization: `Token token=${credentials.token}`
+        },
+        withCredentials: true
+    })
+}
