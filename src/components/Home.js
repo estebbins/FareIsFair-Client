@@ -88,7 +88,7 @@ const Home = (props) => {
                         <>
                             <Button onClick={onClick} value={game.id}>Edit</Button>
                             {
-                                players > 1
+                                players > 0
                                 ?
                                 <Button variant="primary" onClick={()=> {
                                     setConfirmModal(true)

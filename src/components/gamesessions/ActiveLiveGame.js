@@ -1,10 +1,18 @@
-import { Container, Row, Col, Button } from 'react-bootstrap'
+import { Container, Row, Col, Button, Fade } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 
 const ActiveLiveGame = (props) => {
     const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users, finalRound, firstPlace, secondPlace } = props
     
     const [players, setPlayers] = useState(props.players)
+    const [open, setOpen] = useState(false)
+
+    console.log('open', open)
+
+    useEffect(() => {
+        setTimeout(setOpen(true), 2000)
+        
+    }, [question])
 
     useEffect(() => {
         setPlayers(props.players)
@@ -47,7 +55,7 @@ const ActiveLiveGame = (props) => {
                 }
             })
             return (
-                <Row key={i}>
+                <Row>
                     <Col xs={6}>{screenname}</Col>
                     <Col xs={3} mb={2}>{player.score}</Col>
                 </Row>
@@ -110,7 +118,9 @@ const ActiveLiveGame = (props) => {
                                 <Col md={4}>Question {question_num}</Col>
                             </Row>
                             <Row className="justify-content-md-center">
-                                <Col md="auto"><img src={question.image} alt={question.prompt}/></Col>
+                                <Fade in={open}>
+                                    <Col md="auto"><img src={question.image} alt={question.prompt}/></Col>
+                                </Fade>
                             </Row>
                             <Row className="justify-content-md-center">
                                 <Col md="auto">{question.prompt}</Col>
@@ -124,7 +134,6 @@ const ActiveLiveGame = (props) => {
                     }
                 </Row>
             </Container>
-        
         </>
     )
 }

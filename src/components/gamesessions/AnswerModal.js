@@ -1,5 +1,4 @@
 import { Modal, Row, Col, Button } from 'react-bootstrap'
-import { addQuestions } from '../../api/gamesession'
 
 const AnswerModal = (props) => {
     const { show, handleClose, responses, users, startRound, isHost, answer } = props
