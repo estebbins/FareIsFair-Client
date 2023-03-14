@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button, Fade } from 'react-bootstrap'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 
 const ActiveLiveGame = (props) => {
@@ -21,25 +21,6 @@ const ActiveLiveGame = (props) => {
     console.log('active live gameplayers', players)
     console.log('active live game users', users)
 
-    
-    // useEffect(() => {
-    //     if(players && users) {
-    //         player_scores = players.map((player, i) => {
-    //             console.log(player)
-    //             let screenname
-    //             users.forEach(user => {
-    //                 if (user.id === player.player) {
-    //                     screenname = user.screenname
-    //                 }
-    //             })
-    //             return (
-    //                 <Row key={i}>
-    //                     <Col xs={6}>{screenname}</Col>
-    //                     <Col xs={3} mb={2}>{player.score}</Col>
-    //                 </Row>
-    //             )})
-    //     }
-    // },[players])
     useEffect(()=> {
 
     }, [players])
@@ -117,16 +98,16 @@ const ActiveLiveGame = (props) => {
                                 <Col md={4}>Timer: </Col>
                                 <Col md={4}>Question {question_num}</Col>
                             </Row>
-                            <Row className="justify-content-md-center">
-                                <Fade in={open}>
-                                    <Col md="auto"><img src={question.image} alt={question.prompt}/></Col>
-                                </Fade>
+                            <Row className="justify-content-center">
+                                <Col md="auto" className='product-img justify-content-center' style={{backgroundImage: `url(${question.image})`}}>
+                                    {/* <img src={question.image} alt={question.prompt} className='product-imgurl'/> */}
+                                </Col>
                             </Row>
-                            <Row className="justify-content-md-center">
-                                <Col md="auto">{question.prompt}</Col>
+                            <Row className="justify-content-center">
+                                <Col md="auto" className='product-prompt justify-content-center text-center'>{question.prompt}</Col>
                             </Row>
-                            <Row className="justify-content-md-center">
-                                <Col md="auto">{question.additional}</Col>
+                            <Row className="justify-content-center">
+                                <Col md="auto" className='product-additional justify-content-center text-center'>{question.additional}</Col>
                             </Row>
                         </Col>
                         :

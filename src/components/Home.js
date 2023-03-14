@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { gameSessionIndex, addQuestions, getResponses, getQuestion, gameDelete } from '../api/gamesession.js'
-import { Button, Modal, Card } from 'react-bootstrap'
+import { Button, Modal, Card, Container } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
 
@@ -69,28 +69,23 @@ const Home = (props) => {
                 }
             })
             return (
-                <Card className='m-2' key={i}>
-                    { game.is_active ? <Link to="/livegame" state={{ gameId: game.id, isHost: host }} className="btn" variant="danger">Join Live Game Now!!</Link> : null }
-                    <Card.Header>
-                        Game ID: {game.session_name} | 
-                        Players: {players} |
-                        Status: {game.game_result} |
+                <Card className='indexcard' key={i}>
+                    { game.is_active ? <Link to="/livegame" state={{ gameId: game.id, isHost: host }} className="livejoin btn">Click Here to Join Live Game Now!!</Link> : null }
+                    <Card.Header className='indexcard-header d-flex justify-items-center'>
+                        {game.session_name} &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;
+                        {players} players &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp;
+                        Status: {game.game_result} &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;
                         { host ? <>&#9989;</> : null }
                     </Card.Header>
-                    <Card.Body>
-                    {/* <Card.Title>Special title treatment</Card.Title>
-                    <Card.Text>
-                        With supporting text below as a natural lead-in to additional content.
-                    </Card.Text> */}
-                    <Button variant="primary">View</Button> 
+                    <Card.Body className="d-flex indexcard-body">
                     { 
                         host ? 
                         <>
-                            <Button onClick={onClick} value={game.id}>Edit</Button>
+                            <Button className='indexcard-button' onClick={onClick} value={game.id}>Edit</Button>
                             {
                                 players > 0
                                 ?
-                                <Button variant="primary" onClick={()=> {
+                                <Button variant="primary" className='indexcard-button' onClick={()=> {
                                     setConfirmModal(true)
                                     setGameSession(game)
                                     }}
@@ -101,7 +96,7 @@ const Home = (props) => {
                             {
                                 game.game_result === 'pending'
                                 ?
-                                <Button onClick={deleteGame} value={game.id} variant="danger">Delete</Button>
+                                <Button onClick={deleteGame} value={game.id} className='delete'>Delete</Button>
                                 :
                                 null
                             }
@@ -119,27 +114,31 @@ const Home = (props) => {
 
 	return (
 		<>
-			<h2>Home Page</h2>
-            <Button onClick={() => setCreateModalShow(true)}>Create New Game</Button>
-            { games }
-            <CreateGameSessionModal 
-                user={user}
-                show={showCreateModal} 
-                handleClose={() => {
-                    setCreateModalShow(false)
-                }} 
-                triggerRefresh={() => setUpdated(prev => !prev)}
-                gameSession={gameSession}
-                setGameSession={setGameSession}
-                setNewGameSession={setNewGameSession}
-                msgAlert={msgAlert}
-            />
-            <Modal show={confirmModal} onHide={()=>setConfirmModal(false)}>
-                <Modal.Header>Are you sure you want to start this game now?</Modal.Header>
-                { gameSession ? 
-                <Link to="/livegame" state={{ gameId: gameSession.id, isHost: true }}  className="btn" variant="danger">Start Live Game Now!!</Link> : null }
-                <Button onClick={()=>setConfirmModal(false)}>No</Button>
-            </Modal>
+            <Container className='d-flex flex-column justify-items-center'>
+                <br></br>
+                <h2 className='text-center'>Dashboard</h2>
+                <br></br>
+                <Button onClick={() => setCreateModalShow(true)} className='create'>Create New Game</Button>
+                { games }
+                <CreateGameSessionModal 
+                    user={user}
+                    show={showCreateModal} 
+                    handleClose={() => {
+                        setCreateModalShow(false)
+                    }} 
+                    triggerRefresh={() => setUpdated(prev => !prev)}
+                    gameSession={gameSession}
+                    setGameSession={setGameSession}
+                    setNewGameSession={setNewGameSession}
+                    msgAlert={msgAlert}
+                />
+                <Modal show={confirmModal} onHide={()=>setConfirmModal(false)}>
+                    <Modal.Header>Are you sure you want to start this game now?</Modal.Header>
+                    { gameSession ? 
+                    <Link to="/livegame" state={{ gameId: gameSession.id, isHost: true }}  className="btn" variant="danger">Start Live Game Now!!</Link> : null }
+                    <Button onClick={()=>setConfirmModal(false)}>No</Button>
+                </Modal>
+            </Container>
 		</>
 	)
 }
