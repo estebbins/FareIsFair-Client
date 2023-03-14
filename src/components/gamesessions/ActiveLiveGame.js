@@ -2,11 +2,11 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 
 const ActiveLiveGame = (props) => {
-    const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users, finalRound, firstPlace, secondPlace } = props
+    const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users, finalRound, firstPlace, secondPlace, firstPlaceSpins, secondPlaceSpins } = props
     
     const [players, setPlayers] = useState(props.players)
     const [open, setOpen] = useState(false)
-
+    
     console.log('open', open)
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const ActiveLiveGame = (props) => {
                 }
             })
             return (
-                <Row>
+                <Row key={i}>
                     <Col xs={6}>{screenname}</Col>
                     <Col xs={3} mb={2}>{player.score}</Col>
                 </Row>

@@ -116,3 +116,17 @@ export const gameDelete = (credentials, gameSessionId) => {
         withCredentials: true
     })
 }
+
+export const abandonActiveGame = (credentials, gameSessionId) => {
+    return axios({
+        method: 'PATCH',
+        url: apiUrl + `/game/abandon/${gameSessionId}/`,
+    })
+}
+
+export const getSpins = (credentials, gameSessionId) => {
+    return axios({
+		method: 'GET',
+		url: apiUrl + `/livegame/spins/${gameSessionId}/`
+	})
+}

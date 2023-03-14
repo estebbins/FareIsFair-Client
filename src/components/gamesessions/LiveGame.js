@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap'
 import SetUpModal from './SetUpModal'
 import ActiveLiveGame from './ActiveLiveGame'
 import AnswerModal from './AnswerModal'
-import { addQuestions, beginGameSession, getResponses, scorePlayer, nextRound, getGameDetail } from '../../api/gamesession'
+import { addQuestions, beginGameSession, getResponses, scorePlayer, nextRound, getGameDetail, getSpins } from '../../api/gamesession'
 
 //  Passing props to a link: https://ui.dev/react-router-pass-props-to-link
 
@@ -27,6 +27,9 @@ const LiveGame = (props) => {
     const [finalRound, setFinalRound] = useState(false)
     const [firstPlace, setFirstPlace] = useState(null)
     const [secondPlace, setSecondPlace] = useState(null)
+    const [firstPlaceSpins, setFirstPlaceSpins] = useState(0)
+    const [secondPlaceSpins, setSecondPlaceSpins] = useState(0)
+    const [liveRound, setLiveRound] = useState(true)
     // const [showPasswordModal, setShowPasswordModal] = useState(false)
     // Disable handle close for setup if game is not active!!! Close it when it is set to active
     const [showSetUpModal, setShowSetUpModal] = useState(false)
@@ -36,11 +39,15 @@ const LiveGame = (props) => {
     console.log('live game questions', questions)
     console.log('live game activequestion', activeQuestion)
     console.log('live game responses', responses)
+    console.log('firstplace player', firstPlace)
+    console.log('secondplace player', secondPlace)
     // console.log('live game gameSession.active_question', `${ gameSession.active_question ? gameSession.active_question : null }`)
     // Upon loading this page, game whose gameId matches the state gameId needs to be set to active if it is NOT already, game status to also change to in progress
     useEffect(()=> {
+        // Grab all the game's details
         getGameDetail(user, gameId)
             .then((res) => {
+                // If it's active - set it up
                 if (res.data.gameSession.is_active) {
                     // let resQuestions = res.data.gameQuestions
                     // for (let i = 0; i < res.data.gameQuestions.length; i++) {
@@ -50,8 +57,12 @@ const LiveGame = (props) => {
                     //     let url_final = url_adjusted.split('image//').join('image/Target/')
                     //     resQuestions[i] = {...resQuestions[i], image: url_final}
                     // }
+                    console.log('##############', res.data)
                     setQuestions(res.data.gameQuestions)
-                    setPlayers(res.data.players)
+                    // console.log('player data!', res.data['players'])
+                    console.log('player data!', res.data.players)
+                    console.log('player data!', [...res.data.players])
+                    setPlayers([...res.data.players])
                     setUsers(res.data.users)
                     setGameSession(res.data.gameSession)
                     for (let i = 0; i <res.data.players; i++){
@@ -60,11 +71,11 @@ const LiveGame = (props) => {
                         }
                     }
                 } else {  
+                    // If it isn't active & there's no active question, make the call to add questions
                     if(!activeQuestion){
-                        console.log('FIRST USEEFFECT RAN')
                         addQuestions(user, gameId)
                             .then(res => {
-                                console.log('live game useeffect first res', res)
+                                console.log('####?????????', res)
             
                                 // let resQuestions = res.data.gameQuestions
                                 // for (let i = 0; i < res.data.gameQuestions.length; i++) {
@@ -75,6 +86,7 @@ const LiveGame = (props) => {
                                 //     resQuestions[i] = {...resQuestions[i], image: url_final}
                                 // }
                                 setQuestions(res.data.gameQuestions)
+                                console.log('res.data.players#', res.data.players)
                                 setPlayers(res.data.players)
                                 setUsers(res.data.users)
                                 setGameSession(res.data.gameSession)
@@ -84,6 +96,7 @@ const LiveGame = (props) => {
                         }
     }})},[])
 
+    // ! Don't think I need this.
     useEffect(()=> {
         console.log('!!!!!!!!!!!!live game useeffect with updated as dependency')
     },[updated])
@@ -95,23 +108,6 @@ const LiveGame = (props) => {
                 console.log('!!!!!!!!!', res.data.gameSession)
                 setGameSession(res.data.gameSession)
             })
-            // .then(() => getFirstQuestion())
-            // .then(()=>{
-            //     console.log('start game gamesession', gameSession)
-            //     let q
-            //     for (let i = 0; i < questions.length; i++) {
-            //         console.log(i, questions[i].id, gameSession.active_question)
-            //         console.log(i, questions[i])
-            //         console.log(i, questions)
-            //         if(questions[i].id === gameSession.active_question) {
-            //             q = questions[i]
-            //             setQuestions(questions.splice(i,1))
-            //         }
-            //     }
-            //     console.log('q', q)
-            //     setActiveQuestion(q)
-            //     // setQuestions(questions)
-            // })
             .then(()=>setShowSetUpModal(false))
             // .then(()=> setUpdated(prev=>!prev))
             .catch(err => console.log(err))
@@ -135,7 +131,7 @@ const LiveGame = (props) => {
                 })
                 setQuestions(questions)
             }
-        if(gameSession && gameSession.game_result === 'completed'){
+        if(gameSession && gameSession.game_result === 'final_round'){
             setFinalRound(true)
         }
     }, [gameSession])
@@ -187,16 +183,118 @@ const LiveGame = (props) => {
     // useEffect(() => {
     //     setShowPasswordModal(true)
     // }, [])
+    console.log('firstplacespins', firstPlaceSpins)
+    console.log('secondplacespins', secondPlaceSpins)
 
     useEffect(() => {
-        // Check responses if number of players recieved or timer is up
+        // CHECK SPINS IN FINAL ROUND
+        if(finalRound) {
+            if (firstPlaceSpins > 1 && secondPlaceSpins > 1) {
+                // They both lost the final round, but may win by points
+                if (firstPlace.score === secondPlace.score) {
+                    scorePlayer(user, firstPlace.player, gameSession.id, 'win')
+                        .then(res => {
+                            scorePlayer(user, secondPlace.player, gameSession.id, 'win')
+                                .then(res => {
+                                    setPlayers(res.data.playerData)
+                                    // THEN END THE GAME
+                                })
+                        })
+                } else if (firstPlace.score > secondPlace.score) {
+                    scorePlayer(user, firstPlace.player, gameSession.id, 'win')
+                        .then(res => {
+                            scorePlayer(user, secondPlace.player, gameSession.id, 'lose')
+                                .then(res => {
+                                    setPlayers(res.data.playerData)
+                                    // THEN END THE GAME
+                                })
+                        })
+                } else if (secondPlace.score > firstPlace.score) {
+                    scorePlayer(user, firstPlace.player, gameSession.id, 'lose')
+                        .then(res => {
+                            scorePlayer(user, secondPlace.player, gameSession.id, 'win')
+                                .then(res => {
+                                    setPlayers(res.data.playerData)
+                                    // THEN END THE GAME
+                                })
+                        })
+                }
+            } else if (firstPlaceSpins > 1) {
+                scorePlayer(user, firstPlace.player, gameSession.id, 'lose')
+                    .then(res => {
+                        scorePlayer(user, secondPlace.player, gameSession.id, 'win')
+                            .then(res => {
+                                setPlayers(res.data.playerData)
+                                // THEN END THE GAME
+                            })
+                    })
+            } else if(secondPlaceSpins > 1) {
+                scorePlayer(user, firstPlace.player, gameSession.id, 'win')
+                .then(res => {
+                    scorePlayer(user, secondPlace.player, gameSession.id, 'lose')
+                        .then(res => {
+                            console.log('^^^^players', players)
+                            setPlayers(res.data.playerData)
+                            // THEN END THE GAME
+                        })
+                })
+            } else {
+                let finished = 0
+                for(let i = 0; i < responses.length; i++) {
+                    if (responses[i].player === firstPlace.id && responses[i].response === 'done') { 
+                        finished += 1
+                    }
+                    else if (responses[i].player === secondPlace.id && responses[i].response === 'done') {
+                        finished += 1
+                    }
+                }
+                if(finished >= 2) {
+                    if (firstPlaceSpins > secondPlaceSpins) {
+                        scorePlayer(user, firstPlace.player, gameSession.id, 'win')
+                            .then(res => {
+                                scorePlayer(user, secondPlace.player, gameSession.id, 'lose')
+                                    .then(res => {
+                                        setPlayers(res.data.playerData)
+                                        // THEN END THE GAME
+                                    })
+                            })
+                    }
+                    else if (secondPlaceSpins > firstPlaceSpins) {
+                        scorePlayer(user, firstPlace.player, gameSession.id, 'lose')
+                            .then(res => {
+                                scorePlayer(user, secondPlace.player, gameSession.id, 'win')
+                                    .then(res => {
+                                        setPlayers(res.data.playerData)
+                                        // THEN END THE GAME
+                                    })
+                            })
+                    }
+                }
+            }
+        }
+    }, [firstPlaceSpins, secondPlaceSpins])
+
+
+    useEffect(() => {
         if (finalRound && responses) {
-            console.log('responses', responses)
-        
+            console.log('FINAL ROUND!!!', responses)
+            let firstSpins = 0
+            let secondSpins = 0
+            for(let i = 0; i < responses.length; i++) {
+                if (responses[i].player === firstPlace.player && responses[i].response !== 'done') {
+                    console.log('float', parseFloat(responses[i].delta))
+                    firstSpins += parseFloat(responses[i].delta)
+                } else if (responses[i].player === secondPlace.player && responses[i].response !== 'done')(
+                    secondSpins += parseFloat(+responses[i].delta)
+                )
+            }
+            setFirstPlaceSpins(firstSpins)
+            setSecondPlaceSpins(secondSpins)
         } else if(responses) {
-            if(responses.length === players.length){ //! OR TIMER IS UP
+            // Check responses if number of players recieved or timer is up
+            if(!liveRound || responses.length === players.length){ //! OR TIMER IS UP -> LIVE ROUND FALSE
                 console.log('RESSSIES', responses)
-                console.log('length matches length')
+                console.log('length matches length or liveRound = False')
                 let correctResponses = []
                 responses.forEach(response => {
                     if (parseInt(response.delta) >= 0) {
@@ -238,10 +336,12 @@ const LiveGame = (props) => {
     useEffect(() => {
         // find the top 1-2 players
         if(finalRound) {
+            console.log('*******players', players)
             let allPlayers = players.sort((a,b) => 
                 // sort in ascending order
                 parseFloat(a.score) - parseFloat(b.score)
             )
+            console.log('*******playersAFTER', players)
             setFirstPlace(allPlayers.pop())
             setSecondPlace(allPlayers.pop())
         }
@@ -255,9 +355,9 @@ const LiveGame = (props) => {
         nextRound(user, gameSession.id, activeQuestion.id)
             .then(res => {
                 console.log('nextround res', res)
-                if(res.data.gameSession.game_result !== 'completed') {
+                if(res.data.gameSession.game_result !== 'final_round') {
                     setGameSession(res.data.gameSession)
-                } else if (res.data.gameSession.game_result === 'completed') {
+                } else if (res.data.gameSession.game_result === 'final_round') {
                     setFinalRound(true)
                 }
             })
@@ -270,13 +370,23 @@ const LiveGame = (props) => {
 
     const checkResponses = () => {
         console.log('AT CHECK RESPONSES')
-        getResponses(user, gameSession.id, activeQuestion.id)
-            .then(res => {
-                console.log('check responses', res)
-                if (res.data.player_responses.length > 0) {
-                    setResponses(res.data.player_responses)
-                }
-            })
+        if(finalRound) {
+            getSpins(user, gameSession.id)
+                .then(res => {
+                    console.log('check responses', res)
+                    if (res.data.player_responses.length > 0) {
+                        setResponses(res.data.player_responses)
+                    }
+                })
+        } else {
+            getResponses(user, gameSession.id, activeQuestion.id)
+                .then(res => {
+                    console.log('check responses', res)
+                    if (res.data.player_responses.length > 0) {
+                        setResponses(res.data.player_responses)
+                    }
+                })
+        }
     }
 
     const checkFinalRound = () => {
@@ -301,6 +411,8 @@ const LiveGame = (props) => {
             finalRound={finalRound}
             firstPlace={firstPlace}
             secondPlace={secondPlace}
+            firstPlaceSpins={firstPlaceSpins}
+            secondPlaceSpins={secondPlaceSpins}
         />
         <Modal show={false}>
         <Modal.Header>Enter Your Password!</Modal.Header>

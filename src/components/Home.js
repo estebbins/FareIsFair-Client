@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { gameSessionIndex, addQuestions, gameDelete } from '../api/gamesession.js'
+import { gameSessionIndex, addQuestions, gameDelete, abandonActiveGame } from '../api/gamesession.js'
 import { Button, Modal, Card, Container } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
@@ -39,6 +39,10 @@ const Home = (props) => {
             .then(()=>setUpdated(prev=>!prev))
             .catch(err=>console.log(err))
     }
+    const abandonGame = (e) => {
+        abandonActiveGame(user, e.target.value)
+            .then(res => setUpdated(prev=>!prev))
+    }
     // Show a different message if the user is not logged in
     if(!user) {
         return <p>Log in or Sign up to continue!</p>
@@ -49,7 +53,12 @@ const Home = (props) => {
     }
     // Or if they have no game sessions, show below
     if(gameSessions.length === 0) {
-        return <p>You have no games!</p>
+        return (
+            <>
+                <p>You have no games!</p>
+                <Button onClick={() => setCreateModalShow(true)} className='create'>Create New Game</Button>
+            </>
+        )
     }
 
     //! Map the gameSessions associated with that use to buttons
@@ -63,9 +72,13 @@ const Home = (props) => {
             console.log(players)
             // Determine if current player is host by quering array
             let host = false
+            let winner = false
             gameSessions.playerdata.forEach(player => {
-                if (player.player === user.id && player.role === 'h' && player.game === game.id){
+                if (player.player === user.id && player.role === 'h' && player.game === game.id) {
                     host = true
+                }
+                if (player.player === user.id & player.winner) {
+                    winner = true
                 }
             })
             return (
@@ -81,9 +94,8 @@ const Home = (props) => {
                     { 
                         host ? 
                         <>
-                            <Button className='indexcard-button' onClick={onClick} value={game.id}>Edit</Button>
                             {
-                                players > 0
+                                players > 0 && game.game_result === 'pending'
                                 ?
                                 <Button variant="primary" className='indexcard-button' onClick={()=> {
                                     setConfirmModal(true)
@@ -96,15 +108,23 @@ const Home = (props) => {
                             {
                                 game.game_result === 'pending'
                                 ?
-                                <Button onClick={deleteGame} value={game.id} className='delete'>Delete</Button>
+                                <>
+                                    <Button className='indexcard-button' onClick={onClick} value={game.id}>Edit</Button>
+                                    <Button onClick={deleteGame} value={game.id} className='delete'>Delete</Button>
+                                </>
                                 :
+                                null
+                            }
+                            {
+                                game.is_active
+                                ?
+                                <Button onClick={abandonGame} value={game.id} className='delete'>End Game</Button>:
                                 null
                             }
                         </>
                         : 
                         null 
                     }
-                    
                     </Card.Body>
                 </Card>
             )
