@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { gameSessionIndex, addQuestions, getResponses, getQuestion, gameDelete } from '../api/gamesession.js'
+import { gameSessionIndex, addQuestions, gameDelete } from '../api/gamesession.js'
 import { Button, Modal, Card, Container } from 'react-bootstrap'
 import CreateGameSessionModal from './gamesessions/CreateGameSessionModal.js'
 import AddPlayerModal from './players/AddPlayerModal.js'
