@@ -1,4 +1,4 @@
-import { Modal, Row, Col, Button } from 'react-bootstrap'
+import { Modal, Row, Col, Button, Container } from 'react-bootstrap'
 
 const AnswerModal = (props) => {
     const { show, handleClose, responses, users, startRound, isHost, answer } = props
@@ -14,7 +14,7 @@ const AnswerModal = (props) => {
             })
             return (
                 <Row key={i}>
-                    <Col xs={6}>{screenname}</Col>
+                    <Col xs={4}>{screenname}</Col>
                     <Col xs={3} mb={2}>{ans.response}</Col>
                     <Col xs={3} mb={2}>{ans.delta}</Col>
                 </Row>
@@ -23,19 +23,23 @@ const AnswerModal = (props) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton></Modal.Header>
-            <Modal.Body>
-                <Row className='text-center' style={{fontSize: '30px'}}>Correct Answer: {answer}</Row>
-                <Row>
-                    <Col xs={6}>Player</Col>
-                    <Col xs={3} mb={2}>Answer</Col>
-                    <Col xs={3} mb={2}>Delta (-1 for invalid guesses)</Col>
-                </Row>
+            <Modal.Body >
+                <Row className='text-center w-75' style={{fontSize: '30px', marginLeft:'30px', color: '#A32CC4'}}>Correct Answer: {answer}</Row>
+                <hr></hr>
+                <Container style={{fontSize: '20px'}}>
+                    <Row>
+                        <Col xs={4}>Player</Col>
+                        <Col xs={3} mb={2}>Answer</Col>
+                        <Col xs={3} mb={2}>Delta (-1 for invalid guesses)</Col>
+                    </Row>
+                    <hr></hr>
                 {answers}
+                </Container>
             </Modal.Body>
             {
                 isHost
                 ?
-                <Button onClick={()=> startRound()}>Start Next Round</Button>
+                <Button className='create' onClick={()=> startRound()}>Start Next Round</Button>
                 :
                 null
             }
