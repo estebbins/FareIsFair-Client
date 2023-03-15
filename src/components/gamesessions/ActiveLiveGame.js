@@ -2,28 +2,82 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 
 const ActiveLiveGame = (props) => {
-    const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users, finalRound, firstPlace, secondPlace, firstPlaceSpins, secondPlaceSpins } = props
+    const { setShowSetUpModal, isHost, checkResponses, gameSession, question, question_num, users, finalRound, firstPlace, secondPlace, firstPlaceSpins, secondPlaceSpins, finalPlayer } = props
     
     const [players, setPlayers] = useState(props.players)
-    const [open, setOpen] = useState(false)
     
-    console.log('open', open)
+    console.log('active live game props.players', props.players)
 
     useEffect(() => {
-        setTimeout(setOpen(true), 2000)
         
     }, [question])
 
     useEffect(() => {
         setPlayers(props.players)
-    },[gameSession])
+    },[gameSession, props.players])
 
     console.log('active live gameplayers', players)
     console.log('active live game users', users)
 
-    useEffect(()=> {
+    let spinPlayer
 
-    }, [players])
+    console.log('ACTIVE MEGA STATE', 'finalROund', finalRound, 'finalPlayer', finalPlayer, 'firstPlace', firstPlace, 'secondPlace', secondPlace, 'players', players)
+
+    // if (finalRound && !finalPlayer && firstPlace && secondPlace && players) {
+    //     spinPlayer = players.map((player, i) => {
+    //         let screenname
+    //         users.forEach(user => {
+    //             if (user.id === player.player) {
+    //                 screenname = user.screenname
+    //             }
+    //         })
+    //         return (
+    //             <>
+    //                 <Row key={i}>
+    //                     <Col xs={2} mb={2}>{player.player === firstPlace.player ? <>Up Now!!</> : <>Please Wait</>}</Col>
+    //                     <Col xs={3}>{screenname}</Col>
+    //                     <Col xs={3} mb={2}>{player.score}</Col>
+    //                     <Col xs={2} mb={2}>{player.player === firstPlace.player ? firstPlaceSpins : secondPlaceSpins}</Col>
+    //                 </Row>
+    //             </>
+    //         )
+    //     }) 
+    // } else if (finalRound && finalPlayer) {
+    //     spinPlayer = players.map((player, i) => {
+    //         let screenname
+    //         users.forEach(user => {
+    //             if (user.id === player.player) {
+    //                 screenname = user.screenname
+    //             }
+    //         })
+    //         return (
+    //             <>
+    //                 <Row key={i}>
+    //                     <Col xs={2} mb={2}>{player.player === secondPlace.player ? <>Up Now!!</> : <>Please Wait</>}</Col>
+    //                     <Col xs={3}>{screenname}</Col>
+    //                     <Col xs={3} mb={2}>{player.score}</Col>
+    //                     <Col xs={2} mb={2}>{player.player === firstPlace.player ? firstPlaceSpins : secondPlaceSpins}</Col>
+    //                 </Row>
+    //             </>
+    //         )
+    //     }) 
+    // }
+    let topPlayer
+    if (users && firstPlace) {
+        users.forEach(user => {
+            if (user.id === firstPlace.player) {
+                topPlayer = user.screenname
+            }
+        })
+    }
+    let secondPlayer
+    if (users && secondPlace) {
+        users.forEach(user => {
+            if (user.id === secondPlace.player) {
+                secondPlayer = user.screenname
+            }
+        })
+    }
 
     let player_scores
     if(players && players.length > 0 && users) {
@@ -83,9 +137,18 @@ const ActiveLiveGame = (props) => {
                         ?
                         <>
                             <Col xs={8} md={8} id="active-game-area">
-                                Text spin to see if you win!
+                                Text "spin" to see if you win!
                                 The player that gets the closest to $1.00 wins!
+                                <Col style={{fontSize: '50px'}}>
+                                    {topPlayer} and gets.....
+                                </Col>
+                                <p style={{fontSize: '100px'}}>{firstPlaceSpins}</p>
+                                <Col style={{fontSize: '50px'}}>
+                                    {secondPlayer} and gets.....
+                                </Col>
+                                <p style={{fontSize: '100px'}}>{secondPlaceSpins}</p>
                             </Col>
+
                         </>
                         :
                         null
@@ -115,7 +178,7 @@ const ActiveLiveGame = (props) => {
                             </Container>
                         </Col>
                         :
-                        <Col>Waiting On Your Question....</Col>
+                        null
                     }
                 </Row>
             </Container>

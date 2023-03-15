@@ -130,3 +130,10 @@ export const getSpins = (credentials, gameSessionId) => {
 		url: apiUrl + `/livegame/spins/${gameSessionId}/`
 	})
 }
+
+export const getGamePlayers = (credentials, gameSessionId) => {
+    return axios({
+        method: 'GET', 
+        url: apiUrl + `/livegame/players/${gameSessionId}`,
+    })
+}
