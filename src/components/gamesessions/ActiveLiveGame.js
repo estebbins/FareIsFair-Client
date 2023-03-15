@@ -23,45 +23,45 @@ const ActiveLiveGame = (props) => {
 
     console.log('ACTIVE MEGA STATE', 'finalROund', finalRound, 'finalPlayer', finalPlayer, 'firstPlace', firstPlace, 'secondPlace', secondPlace, 'players', players)
 
-    // if (finalRound && !finalPlayer && firstPlace && secondPlace && players) {
-    //     spinPlayer = players.map((player, i) => {
-    //         let screenname
-    //         users.forEach(user => {
-    //             if (user.id === player.player) {
-    //                 screenname = user.screenname
-    //             }
-    //         })
-    //         return (
-    //             <>
-    //                 <Row key={i}>
-    //                     <Col xs={2} mb={2}>{player.player === firstPlace.player ? <>Up Now!!</> : <>Please Wait</>}</Col>
-    //                     <Col xs={3}>{screenname}</Col>
-    //                     <Col xs={3} mb={2}>{player.score}</Col>
-    //                     <Col xs={2} mb={2}>{player.player === firstPlace.player ? firstPlaceSpins : secondPlaceSpins}</Col>
-    //                 </Row>
-    //             </>
-    //         )
-    //     }) 
-    // } else if (finalRound && finalPlayer) {
-    //     spinPlayer = players.map((player, i) => {
-    //         let screenname
-    //         users.forEach(user => {
-    //             if (user.id === player.player) {
-    //                 screenname = user.screenname
-    //             }
-    //         })
-    //         return (
-    //             <>
-    //                 <Row key={i}>
-    //                     <Col xs={2} mb={2}>{player.player === secondPlace.player ? <>Up Now!!</> : <>Please Wait</>}</Col>
-    //                     <Col xs={3}>{screenname}</Col>
-    //                     <Col xs={3} mb={2}>{player.score}</Col>
-    //                     <Col xs={2} mb={2}>{player.player === firstPlace.player ? firstPlaceSpins : secondPlaceSpins}</Col>
-    //                 </Row>
-    //             </>
-    //         )
-    //     }) 
-    // }
+    if (finalRound && !finalPlayer && firstPlace && secondPlace && players) {
+        spinPlayer = players.map((player, i) => {
+            let screenname
+            users.forEach(user => {
+                if (user.id === player.player) {
+                    screenname = user.screenname
+                }
+            })
+            return (
+                <>
+                    <Row key={i}>
+                        <Col xs={2} mb={2}>{player.player === firstPlace.player ? <>Up Now!!</> : <>Please Wait</>}</Col>
+                        <Col xs={3}>{screenname}</Col>
+                        <Col xs={3} mb={2}>{player.score}</Col>
+                        <Col xs={2} mb={2}>{player.player === firstPlace.player ? firstPlaceSpins : secondPlaceSpins}</Col>
+                    </Row>
+                </>
+            )
+        }) 
+    } else if (finalRound && finalPlayer) {
+        spinPlayer = players.map((player, i) => {
+            let screenname
+            users.forEach(user => {
+                if (user.id === player.player) {
+                    screenname = user.screenname
+                }
+            })
+            return (
+                <>
+                    <Row key={i}>
+                        <Col xs={2} mb={2}>{player.player === secondPlace.player ? <>Up Now!!</> : <>Please Wait</>}</Col>
+                        <Col xs={3}>{screenname}</Col>
+                        <Col xs={3} mb={2}>{player.score}</Col>
+                        <Col xs={2} mb={2}>{player.player === firstPlace.player ? firstPlaceSpins : secondPlaceSpins}</Col>
+                    </Row>
+                </>
+            )
+        }) 
+    }
     let topPlayer
     if (users && firstPlace) {
         users.forEach(user => {
@@ -101,7 +101,7 @@ const ActiveLiveGame = (props) => {
         <>
             <Container className="mx-auto">
                 <Row className="justify-content-md-center">
-                    <Col id="active-game-header">
+                    <Col className='logoheader' id="active-game-header">
                         <h1>Fare Is Fair!</h1>
                     </Col>
                 </Row>
@@ -132,36 +132,39 @@ const ActiveLiveGame = (props) => {
                             </ul></small>
                         </Container>
                     </Col>
+                    <Col xs={1} md={1} style={{padding: '0', marginRight: '-45px'}}>
+                    </Col>
                     {
                         finalRound
                         ?
                         <>
-                            <Col xs={8} md={8} id="active-game-area">
+                            {/* <Col xs={8} md={8} id="active-game-area">
+                                {spinPlayer}
+                            </Col> */}
+                            <Col xs={8} md={8} id="active-game-area" style={{fontSize: '30px'}}>
                                 Text "spin" to see if you win!
                                 The player that gets the closest to $1.00 wins!
-                                <Col style={{fontSize: '50px'}}>
+                                <Col style={{fontSize: '50px'}} className='text-center'>
                                     {topPlayer} and gets.....
                                 </Col>
-                                <p style={{fontSize: '100px'}}>{firstPlaceSpins}</p>
-                                <Col style={{fontSize: '50px'}}>
+                                <p style={{fontSize: '100px'}} className='text-center'>{firstPlaceSpins}</p>
+                                <Col className='text-center'style={{fontSize: '50px'}}>
                                     {secondPlayer} and gets.....
                                 </Col>
-                                <p style={{fontSize: '100px'}}>{secondPlaceSpins}</p>
+                                <p style={{fontSize: '100px'}} className='text-center'>{secondPlaceSpins}</p>
                             </Col>
 
                         </>
                         :
                         null
                     }
-                    <Col xs={1} md={1} style={{padding: '0', marginRight: '-45px'}}>
-                    </Col>
                     {
                         question && !finalRound
                         ?
                         <Col xs={8} md={8} id="active-game-area">
                             <Row>
-                                <Col md={4} className='timer'>Timer: </Col>
-                                <Col md={4} className='text-center question-num'>Question {question_num}</Col>
+                                <Col md={4} className='timer'></Col>
+                                <Col md={4} className='text-center question-num' style={{fontSize: '30px'}}>Question {question_num}</Col>
                             </Row>
                             <Container className="questionarea w-100">
                                 <Row className="justify-content-center">

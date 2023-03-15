@@ -24,7 +24,7 @@ const AnswerModal = (props) => {
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
-                <Row>Correct Answer: {answer}</Row>
+                <Row className='text-center' style={{fontSize: '30px'}}>Correct Answer: {answer}</Row>
                 <Row>
                     <Col xs={6}>Player</Col>
                     <Col xs={3} mb={2}>Answer</Col>

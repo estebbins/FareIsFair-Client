@@ -446,9 +446,10 @@ const LiveGame = (props) => {
                 // sort in ascending order
                 parseFloat(a.score) - parseFloat(b.score)
             )
+            let topPlayers = [...allPlayers]
             console.log('*******playersAFTER', players)
-            setFirstPlace(allPlayers.pop())
-            setSecondPlace(allPlayers.pop())
+            setFirstPlace(topPlayers.pop())
+            setSecondPlace(topPlayers.pop())
         }
     }, [players, finalRound])
 

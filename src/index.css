@@ -24,10 +24,12 @@ code {
 #active-game-scores {
     background-color: #C67ACE!important;
     font-family: 'Coustard', serif;
+    border-radius: 10px;
 
 }
 #active-game-area {
     background-color: #d8f8b7e1!important;
+    border-radius: 10px;
 }
 .source-list {
     list-style: none;
